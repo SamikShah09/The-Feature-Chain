@@ -59,6 +59,25 @@
   .btn.ghost{background:transparent}
   .btn .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
 
+  /* ── mode toggle ── */
+  .mode-wrap{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .mode-label{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dimmer)}
+  .mode-toggle{display:flex;border:1px solid var(--line-faint);border-radius:11px;overflow:hidden;background:var(--surface)}
+  .mode-toggle button{
+    border:0;border-radius:0;padding:9px 20px;font-size:13px;font-weight:700;letter-spacing:.04em;
+    background:transparent;color:var(--ink-dim);transition:background .15s,color .15s;text-transform:uppercase;
+    font-family:"Space Mono",monospace;
+  }
+  .mode-toggle button:first-child{border-right:1px solid var(--line-faint)}
+  .mode-toggle button.active.easy{color:var(--gold);background:rgba(242,193,78,.12)}
+  .mode-toggle button.active.hard{color:var(--steel);background:rgba(127,179,196,.12)}
+  .mode-badge{
+    font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    padding:3px 8px;border-radius:6px;
+  }
+  .mode-badge.easy{background:rgba(242,193,78,.12);color:var(--gold-deep)}
+  .mode-badge.hard{background:rgba(127,179,196,.12);color:var(--steel)}
+
   .statusbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:4px 0 22px;
     font-family:"Space Mono",monospace;font-size:12px;color:var(--ink-dimmer);letter-spacing:.04em}
   .statusbar .pill{padding:5px 10px;border:1px solid var(--line-faint);border-radius:999px;background:rgba(255,255,255,.02)}
@@ -155,8 +174,6 @@
   .res .nope{font-size:12px;color:var(--ink-dimmer)}
   .empty{padding:22px 16px;color:var(--ink-dimmer);font-size:13.5px;text-align:center}
 
-  footer{margin-top:40px;color:var(--ink-dimmer);font-size:11.5px;font-family:"Space Mono",monospace;letter-spacing:.03em;line-height:1.7}
-  footer a{color:var(--ink-dim)}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
   @media (max-width:680px){
@@ -188,6 +205,15 @@
     </div>
   </header>
 
+  <div class="mode-wrap">
+    <span class="mode-label">Difficulty</span>
+    <div class="mode-toggle">
+      <button class="easy active" id="modeEasy">Easy</button>
+      <button class="hard" id="modeHard">Hard</button>
+    </div>
+    <span class="mode-badge easy" id="modeBadge">Popular artists only</span>
+  </div>
+
   <div class="statusbar">
     <span class="pill">Dataset: <b id="statSongs">0</b> songs &middot; <b id="statArtists">0</b> artists</span>
     <span class="pill live">Your chain: <b id="statHops">0</b> artists</span>
@@ -205,7 +231,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Add an artist">
@@ -221,7 +246,41 @@
 <script>
 const EMBEDDED_DATA = __DATA__;
 
+// ── mode & data ──────────────────────────────────────────
+let FULL_DATA = EMBEDDED_DATA;
 let DATA = EMBEDDED_DATA;
+let MODE = "easy";
+const EASY_MIN_SONGS = 3; // artist must appear in this many songs to show in Easy mode
+
+function filterEasy(full) {
+  const count = {};
+  for (const s of full.songs) {
+    for (const a of s.artists) count[a] = (count[a] || 0) + 1;
+  }
+  const popular = new Set(Object.keys(count).filter(a => count[a] >= EASY_MIN_SONGS));
+  const songs = full.songs.filter(s => s.artists.every(a => popular.has(a)));
+  return { version: full.version, songs };
+}
+
+function applyMode(mode) {
+  MODE = mode;
+  DATA = mode === "easy" ? filterEasy(FULL_DATA) : FULL_DATA;
+
+  // update toggle buttons
+  document.getElementById("modeEasy").classList.toggle("active", mode === "easy");
+  document.getElementById("modeHard").classList.toggle("active", mode === "hard");
+
+  // update badge
+  const badge = document.getElementById("modeBadge");
+  badge.className = "mode-badge " + mode;
+  badge.textContent = mode === "easy" ? "Popular artists only" : "Full dataset — all artists";
+
+  buildIndex();
+  start = null; end = null; chain = []; solved = false;
+  newMatchup();
+}
+
+// ── graph state ──────────────────────────────────────────
 let ARTISTS = [];
 let ADJ = new Map();
 let PAIR = new Map();
@@ -456,6 +515,8 @@ function wire(){
   $("#solveBtn").onclick = solve;
   $("#bannerSolve").onclick = solve;
   $("#hintBtn").onclick = hint;
+  $("#modeEasy").onclick = () => applyMode("easy");
+  $("#modeHard").onclick = () => applyMode("hard");
   $("#search").oninput = e=>renderResults(e.target.value);
   $("#search").onkeydown = e=>{
     const items=[...document.querySelectorAll(".res")];
@@ -473,8 +534,9 @@ function wire(){
 async function init(){
   try{
     const r = await fetch("data.json",{cache:"no-store"});
-    if(r.ok){ const j=await r.json(); if(j && Array.isArray(j.songs) && j.songs.length) DATA=j; }
+    if(r.ok){ const j=await r.json(); if(j && Array.isArray(j.songs) && j.songs.length) FULL_DATA=j; }
   }catch(_){ }
+  DATA = filterEasy(FULL_DATA);
   buildIndex();
   wire();
   newMatchup();
