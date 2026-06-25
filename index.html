@@ -1,715 +1,912 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Feature Chain — connect the rappers</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Feature Line</title>
 <style>
-  :root{
-    --bg:#0E0D12;--bg-2:#15141B;--surface:#1C1A24;--surface-2:#25222F;
-    --line-faint:#3A3645;
-    --ink:#F3EEE3;--ink-dim:#A7A2B3;--ink-dimmer:#6F6A7C;
-    --gold:#F2C14E;--gold-bright:#FFD877;--gold-deep:#C9962F;
-    --rust:#C2614A;--steel:#7FB3C4;
-    --rail:8px;--node:118px;--r:14px;
-    --shadow:0 18px 50px -22px rgba(0,0,0,.8);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:
-      radial-gradient(1100px 600px at 12% -8%,#1a1726 0%,rgba(26,23,38,0) 60%),
-      radial-gradient(900px 500px at 100% 0%,#15202a 0%,rgba(21,32,42,0) 55%),
-      var(--bg);
-    color:var(--ink);
-    font-family:"Space Grotesk",system-ui,-apple-system,sans-serif;
-    min-height:100vh;-webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
+:root{
+  --bg:#0b0b14;
+  --surface:#111120;
+  --surface-2:#181828;
+  --surface-3:#202038;
+  --gold:#f0c640;
+  --gold-dim:rgba(240,198,64,.28);
+  --gold-glow:rgba(240,198,64,.55);
+  --blue:#3ec8f0;
+  --blue-dim:rgba(62,200,240,.22);
+  --green:#3ef0aa;
+  --green-dim:rgba(62,240,170,.22);
+  --green-glow:rgba(62,240,170,.5);
+  --text:#dde0ef;
+  --muted:#5a5a8a;
+  --faint:#2a2a44;
+  --err:#f06070;
+  --border:rgba(255,255,255,.08);
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+button{font-family:inherit;cursor:pointer;}
 
-  /* ── header ── */
-  header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
-  .brand{display:flex;flex-direction:column;gap:4px}
-  h1{
-    font-family:"Archivo",sans-serif;font-weight:900;
-    font-size:clamp(30px,5.4vw,58px);line-height:.92;letter-spacing:.01em;
-    text-transform:uppercase;margin:0;color:var(--ink);
-  }
-  h1 .em{color:var(--gold)}
+/* ── TOP BAR ── */
+.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:28px 44px 16px;flex-wrap:wrap;}
+.desc{font-size:13.5px;line-height:1.65;color:var(--muted);max-width:480px;}
+.desc strong{color:var(--text);}
+.top-btns{display:flex;gap:10px;align-items:center;flex-shrink:0;}
+.btn{padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;font-weight:700;letter-spacing:.02em;transition:all .15s;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;}
+.btn:hover{background:var(--surface-3);border-color:rgba(255,255,255,.16);}
+.btn-gold{background:var(--gold);color:#0b0b14;border-color:var(--gold);}
+.btn-gold:hover{filter:brightness(1.08);background:var(--gold);}
+.btn-outline{border-color:rgba(255,255,255,.2);}
+.btn-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;}
 
-  /* ── chain visual ── */
-  .brand-chain{display:flex;align-items:center;margin-top:9px;gap:0}
-  .brand-chain b{display:block;border:2.5px solid var(--gold-deep);border-radius:50%;flex-shrink:0;opacity:.75}
-  .brand-chain b:nth-child(odd){width:22px;height:12px}
-  .brand-chain b:nth-child(even){width:12px;height:22px;margin:0 -3px;border-color:var(--gold);position:relative;z-index:1;opacity:.9}
+/* ── TITLE ── */
+.title-area{text-align:center;padding:4px 44px 14px;}
+.title-row{display:inline-flex;align-items:center;gap:12px;flex-wrap:nowrap;}
+.title-word{font-size:clamp(18px,3.6vw,32px);font-weight:900;text-transform:uppercase;letter-spacing:-.015em;color:var(--text);white-space:nowrap;}
+/* chain between title words */
+.t-chain{display:flex;align-items:center;flex-shrink:0;}
+.t-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold-glow);animation:tpulse 2.5s ease-in-out infinite;flex-shrink:0;}
+.t-dot:nth-child(2){animation-delay:.45s;}.t-dot:nth-child(4){animation-delay:.9s;}.t-dot:nth-child(6){animation-delay:1.35s;}.t-dot:nth-child(8){animation-delay:1.8s;}
+.t-seg{width:13px;height:2px;background:var(--gold);opacity:.45;flex-shrink:0;}
+@keyframes tpulse{0%,100%{box-shadow:0 0 5px var(--gold-glow);}50%{box-shadow:0 0 14px rgba(240,198,64,.9),0 0 22px rgba(240,198,64,.35);}}
 
-  .tag{color:var(--ink-dim);font-size:14.5px;max-width:46ch;line-height:1.45;margin-top:10px}
-  .tag b{color:var(--ink);font-weight:600}
+/* ── MODE BAR ── */
+.mode-bar{display:flex;align-items:center;gap:0;padding:0 44px 10px;flex-wrap:wrap;gap:10px;}
+.mode-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);flex-shrink:0;}
+.mode-sep{width:1px;height:26px;background:var(--border);margin:0 6px;flex-shrink:0;}
+.pill{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:all .14s;}
+.pill:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
+.pill.active{background:var(--surface-2);border-color:rgba(255,255,255,.24);color:var(--text);}
+.challenge-pill{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;border:1.5px solid rgba(255,255,255,.14);background:transparent;color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;}
+.challenge-pill:hover{color:var(--text);border-color:rgba(255,255,255,.26);}
+.challenge-pill.active{border-color:var(--blue);color:var(--blue);background:rgba(62,200,240,.07);}
+.ch-icon{font-size:14px;}
 
-  .ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-  button{font-family:inherit;cursor:pointer;border:0;border-radius:11px;font-weight:600}
-  .btn{
-    background:var(--surface-2);color:var(--ink);border:1px solid var(--line-faint);
-    padding:11px 15px;font-size:13.5px;
-    transition:transform .12s ease,border-color .15s ease,background .15s ease;
-    display:inline-flex;align-items:center;gap:8px;
-  }
-  .btn:hover{border-color:#544f63;transform:translateY(-1px)}
-  .btn:active{transform:translateY(0)}
-  .btn.gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:#241b07;border-color:var(--gold-deep);font-weight:700}
-  .btn.gold:hover{filter:brightness(1.05)}
-  .btn.ghost{background:transparent}
-  .btn .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+/* ── STATS BAR ── */
+.stats-bar{display:flex;align-items:center;gap:8px;padding:0 44px 20px;flex-wrap:wrap;}
+.stat{padding:6px 15px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--muted);font-family:monospace;}
+.stat strong{color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;}
 
-  /* ── mode row ── */
-  .mode-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-bottom:18px}
-  .mode-group{display:flex;align-items:center;gap:10px}
-  .mode-label{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-dimmer)}
-  .mode-toggle{display:flex;border:1px solid var(--line-faint);border-radius:11px;overflow:hidden;background:var(--surface)}
-  .mode-toggle button{
-    border:0;border-radius:0;padding:9px 20px;font-size:12.5px;font-weight:700;
-    letter-spacing:.06em;background:transparent;color:var(--ink-dim);
-    transition:background .15s,color .15s;text-transform:uppercase;font-family:"Space Mono",monospace;
-  }
-  .mode-toggle button:first-child{border-right:1px solid var(--line-faint)}
-  .mode-toggle button.active.easy{color:var(--gold);background:rgba(242,193,78,.12)}
-  .mode-toggle button.active.hard{color:var(--steel);background:rgba(127,179,196,.12)}
-  .mode-badge{
-    font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.14em;
-    text-transform:uppercase;padding:4px 9px;border-radius:7px;
-  }
-  .mode-badge.easy{background:rgba(242,193,78,.1);color:var(--gold-deep)}
-  .mode-badge.hard{background:rgba(127,179,196,.1);color:var(--steel)}
-  .mode-sep{width:1px;height:28px;background:var(--line-faint)}
+/* ── PANELS ── */
+.panel{margin:0 44px 14px;border-radius:var(--r);padding:14px 20px;border:1px solid var(--border);font-size:13px;}
+.panel-hint{border-color:rgba(240,198,64,.2);background:rgba(240,198,64,.04);}
+.panel-hint strong{color:var(--gold);}
+.panel-path{background:var(--surface);}
+.panel-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;}
+.ps-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap;}
+.ps-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.ps-name{font-size:13px;font-weight:700;}
+.ps-arr{font-size:11px;color:var(--muted);}
+.ps-via{font-size:11px;color:var(--muted);font-style:italic;}
+.panel-err{border-color:rgba(240,96,112,.25);background:rgba(240,96,112,.05);color:var(--err);}
 
-  /* song challenge toggle button */
-  .song-tog{
-    background:var(--surface);border:1px solid var(--line-faint);color:var(--ink-dim);
-    padding:9px 14px;font-size:12.5px;font-family:"Space Mono",monospace;
-    letter-spacing:.06em;text-transform:uppercase;
-    transition:background .15s,color .15s,border-color .15s;
-  }
-  .song-tog.on{background:rgba(127,179,196,.12);border-color:var(--steel);color:var(--steel)}
-  .song-tog:hover{border-color:#544f63}
+/* ── CHAIN AREA ── */
+.chain-area{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:10px 0 24px;min-height:300px;}
+.chain-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:44px 60px 52px;position:relative;}
+/* The background rail line */
+.chain-scroll::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:rgba(255,255,255,.09);transform:translateY(-50%);pointer-events:none;z-index:0;}
+.chain-row{display:flex;align-items:center;justify-content:center;min-width:max-content;position:relative;z-index:1;gap:0;}
 
-  /* ── statusbar ── */
-  .statusbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:4px 0 22px;
-    font-family:"Space Mono",monospace;font-size:12px;color:var(--ink-dimmer);letter-spacing:.04em}
-  .statusbar .pill{padding:5px 10px;border:1px solid var(--line-faint);border-radius:999px;background:rgba(255,255,255,.02)}
-  .statusbar .pill b{color:var(--ink);font-weight:700}
-  .statusbar .pill.live b{color:var(--gold)}
+/* ── STATION GROUP (card + dot below) ── */
+.stn-group{display:flex;flex-direction:column;align-items:center;position:relative;flex-shrink:0;}
+.stn-card{border-radius:var(--r);padding:18px 22px 16px;min-width:130px;max-width:168px;text-align:center;position:relative;border:2px solid transparent;}
+.stn-card.start{border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 1px var(--gold-dim),0 8px 28px rgba(0,0,0,.45);}
+.stn-card.target{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 1px var(--blue-dim),0 8px 28px rgba(0,0,0,.45);}
+.stn-card.stop{border-color:var(--green);background:var(--surface);box-shadow:0 0 0 1px var(--green-dim);}
+.stn-card.target.won{border-color:var(--green);box-shadow:0 0 0 1px var(--green-dim),0 0 24px var(--green-glow);}
+.card-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:7px;}
+.stn-card.start .card-role{color:var(--gold);}
+.stn-card.target .card-role{color:var(--blue);}
+.stn-card.target.won .card-role{color:var(--green);}
+.stn-card.stop .card-role{color:var(--green);font-size:8px;}
+.card-name{font-size:20px;font-weight:900;text-transform:uppercase;line-height:1.1;color:var(--text);letter-spacing:-.01em;word-break:break-word;}
+.stn-card.stop .card-name{font-size:14px;}
+.stn-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid transparent;margin-top:9px;}
+.stn-card.start + .stn-dot,.stn-group:has(.start) .stn-dot{border-color:var(--gold);}
+.stn-group:has(.target:not(.won)) .stn-dot{border-color:var(--blue);}
+.stn-group:has(.target.won) .stn-dot{background:var(--green);border-color:var(--green);}
+.stn-group:has(.stop) .stn-dot{background:var(--green);border-color:var(--green);}
 
-  /* ── board ── */
-  .board{position:relative;padding:30px 6px 8px}
-  .line{
-    display:flex;align-items:stretch;gap:0;flex-wrap:nowrap;overflow-x:auto;
-    padding:18px 8px 30px;scrollbar-width:thin;scrollbar-color:#3a3645 transparent;
-  }
-  .line::-webkit-scrollbar{height:8px}
-  .line::-webkit-scrollbar-thumb{background:#332f3e;border-radius:8px}
+/* ── CONNECTORS ── */
+.connector{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;}
+.c-line{height:3px;width:60px;transition:all .3s;}
+.c-line.dim{background:rgba(255,255,255,.12);}
+.c-line.lit{background:var(--green);box-shadow:0 0 8px var(--green-glow);}
+.c-line.dash{background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0,rgba(255,255,255,.18) 5px,transparent 5px,transparent 11px);}
+.c-song{position:absolute;top:6px;font-size:9px;color:var(--muted);font-style:italic;white-space:nowrap;max-width:72px;overflow:hidden;text-overflow:ellipsis;}
 
-  .station{flex:0 0 var(--node);width:var(--node);display:flex;flex-direction:column;align-items:center;position:relative}
-  .stationcard{
-    width:100%;min-height:118px;border-radius:var(--r);padding:14px 11px;
-    background:linear-gradient(180deg,var(--surface),var(--surface-2));
-    border:1px solid var(--line-faint);box-shadow:var(--shadow);
-    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center;position:relative;
-    transition:border-color .15s ease,transform .15s ease;
-  }
-  .station.terminal .stationcard{min-height:150px}
-  .station .marker{font-family:"Space Mono",monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase}
-  .station.start .marker{color:var(--gold)}
-  .station.end .marker{color:var(--steel)}
-  .station.mid .marker{color:var(--ink-dimmer)}
-  .station.start .stationcard{border-color:rgba(242,193,78,.55);box-shadow:0 0 0 1px rgba(242,193,78,.12),var(--shadow)}
-  .station.end .stationcard{border-color:rgba(127,179,196,.55);box-shadow:0 0 0 1px rgba(127,179,196,.12),var(--shadow)}
-  .aname{font-family:"Archivo",sans-serif;font-weight:800;text-transform:uppercase;line-height:.98;
-    font-size:clamp(13px,1.5vw,17px);letter-spacing:.005em;overflow-wrap:break-word;word-break:normal}
-  .station.terminal .aname{font-size:clamp(15px,1.7vw,20px)}
-  .nodepip{width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--ink-dimmer);
-    margin-top:10px;z-index:2;transition:border-color .2s,background .2s,box-shadow .2s}
-  .station.start .nodepip{border-color:var(--gold)}
-  .station.end .nodepip{border-color:var(--steel)}
-  .station.linked .nodepip{border-color:var(--gold);background:var(--gold);box-shadow:0 0 0 5px rgba(242,193,78,.16)}
-  .station .remove{position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;
-    background:var(--surface-2);border:1px solid var(--line-faint);color:var(--ink-dim);font-size:14px;line-height:1;
-    display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .12s,color .12s}
-  .station.mid:hover .remove,.station.mid:focus-within .remove{opacity:1}
-  .station .remove:hover{color:var(--rust);border-color:var(--rust)}
+/* ── ADD STOP BUTTON ── */
+.add-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
+.add-btn{width:38px;height:38px;border-radius:50%;border:2px dashed rgba(255,255,255,.22);background:var(--bg);color:rgba(255,255,255,.28);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;}
+.add-btn:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 10px var(--gold-dim);}
+.add-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap;position:absolute;top:46px;}
 
-  .seg{flex:1 1 96px;min-width:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;padding-top:53px}
-  .seg .rail{position:absolute;top:60px;left:-2px;right:-2px;height:var(--rail);border-radius:6px;background:var(--line-faint);z-index:0}
-  .seg.linked .rail{background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-bright));box-shadow:0 0 16px -2px rgba(242,193,78,.55)}
-  .seg.broken .rail{background:transparent;border-top:3px dashed rgba(194,97,74,.6);height:0;top:63px}
-  .seg.pending .rail{background:linear-gradient(90deg,rgba(127,179,196,.3),rgba(127,179,196,.5));box-shadow:0 0 10px -4px rgba(127,179,196,.4)}
-  .seg .song{
-    position:relative;z-index:1;max-width:150px;margin-top:-2px;
-    font-family:"Space Mono",monospace;font-size:10.5px;line-height:1.3;text-align:center;
-    background:var(--bg-2);border:1px solid var(--line-faint);border-radius:8px;padding:6px 9px;color:var(--ink-dim);
-  }
-  .seg.linked .song{color:var(--ink);border-color:rgba(242,193,78,.4)}
-  .seg .song .ft{display:block;font-size:8.5px;letter-spacing:.18em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:2px}
-  .seg .song .more{color:var(--ink-dimmer)}
-  .seg .addbtn{
-    position:relative;z-index:2;width:46px;height:46px;border-radius:50%;
-    background:var(--bg-2);border:2px dashed #4b4658;color:var(--ink-dim);font-size:24px;font-weight:400;line-height:1;
-    display:flex;align-items:center;justify-content:center;transition:all .15s ease;
-  }
-  .seg .addbtn:hover{border-color:var(--gold);color:var(--gold);transform:scale(1.06);border-style:solid}
-  .seg .addhint{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dimmer);margin-top:8px}
-  .seg.broken .song{border-color:rgba(194,97,74,.45);color:#c98a7b}
+/* ── INLINE INPUT CARD ── */
+.inp-group{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
+.inp-card{border:2px dashed var(--gold);border-radius:var(--r);padding:13px 15px;width:220px;background:var(--surface);position:relative;}
+.inp-toggle{display:flex;gap:4px;margin-bottom:9px;}
+.im{flex:1;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:all .12s;}
+.im:hover{color:var(--text);}
+.im.on{background:var(--surface-2);color:var(--text);border-color:rgba(255,255,255,.22);}
+.inp-field{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:13px;outline:none;font-family:inherit;}
+.inp-field:focus{border-color:var(--gold);}
+.inp-field::placeholder{color:var(--muted);}
+.inp-drop{position:absolute;top:calc(100% + 6px);left:-2px;right:-2px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);z-index:400;max-height:230px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,.6);}
+.drop-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s;}
+.drop-item:last-child{border-bottom:none;}
+.drop-item:hover{background:rgba(240,198,64,.1);}
+.di-title{font-size:13px;font-weight:700;color:var(--text);}
+.di-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.di-sub em{color:var(--gold);font-style:normal;font-weight:700;}
 
-  /* song challenge input inside seg */
-  .song.pending-box{border-color:rgba(127,179,196,.35);color:var(--ink-dim)}
-  .song.pending-box .ft{color:var(--steel);letter-spacing:.14em}
-  .sinput-wrap{display:flex;align-items:center;gap:4px;margin-top:5px}
-  .sinput{
-    flex:1;min-width:0;background:var(--bg);border:1px solid var(--line-faint);
-    border-radius:5px;padding:3px 6px;color:var(--ink);
-    font-family:"Space Mono",monospace;font-size:9.5px;outline:none;
-    transition:border-color .15s;
-  }
-  .sinput:focus{border-color:var(--steel)}
-  .schk{background:var(--surface-2);border:1px solid var(--line-faint);color:var(--steel);
-    border-radius:5px;padding:3px 7px;font-size:10px;cursor:pointer;line-height:1}
-  .schk:hover{background:rgba(127,179,196,.12);border-color:var(--steel)}
-  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
-  .shake{animation:shake .35s ease}
+/* ── ARTIST PICKER CARD ── */
+.pick-card{border:2px dashed var(--gold);border-radius:var(--r);padding:14px 16px;width:230px;background:var(--surface);text-align:center;}
+.pick-via{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.pick-song{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:12px;}
+.pick-opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.pick-opt{padding:7px 13px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);font-size:12px;font-weight:600;transition:all .14s;}
+.pick-opt:hover{background:rgba(240,198,64,.13);border-color:var(--gold);color:var(--gold);}
+.pick-cancel{display:block;margin-top:10px;font-size:11px;color:var(--muted);background:none;border:none;font-family:inherit;}
+.pick-cancel:hover{color:var(--text);}
 
-  /* ── banner ── */
-  .banner{margin:14px 6px 0;border-radius:16px;padding:0;max-height:0;overflow:hidden;opacity:0;
-    transition:max-height .4s ease,opacity .3s ease,padding .3s ease}
-  .banner.show{max-height:240px;opacity:1;padding:20px 22px;
-    background:linear-gradient(120deg,rgba(242,193,78,.14),rgba(127,179,196,.08));
-    border:1px solid rgba(242,193,78,.4)}
-  .banner h2{font-family:"Archivo",sans-serif;font-weight:900;text-transform:uppercase;margin:0 0 4px;
-    font-size:clamp(20px,3vw,30px);letter-spacing:.01em}
-  .banner h2 .em{color:var(--gold)}
-  .banner p{margin:0 0 14px;color:var(--ink-dim);font-size:14px}
-  .banner .row{display:flex;flex-wrap:wrap;gap:10px}
+/* ── WIN ── */
+.win-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:600;backdrop-filter:blur(6px);}
+.win-card{background:var(--surface);border:1px solid rgba(62,240,170,.28);border-radius:16px;padding:40px 48px;text-align:center;max-width:380px;}
+.win-card h2{font-size:30px;color:var(--green);margin-bottom:8px;}
+.win-card p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.5;}
+.win-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-  /* ── modal ── */
-  .scrim{position:fixed;inset:0;background:rgba(8,7,11,.66);backdrop-filter:blur(3px);
-    display:none;align-items:flex-start;justify-content:center;padding:12vh 18px 18px;z-index:50}
-  .scrim.show{display:flex}
-  .modal{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line-faint);
-    border-radius:18px;box-shadow:var(--shadow);overflow:hidden;animation:pop .18s ease}
-  @keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-  .modal .mhead{padding:16px 18px 12px;border-bottom:1px solid var(--line-faint)}
-  .modal .mhead .lbl{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dimmer)}
-  .modal .mhead .lbl b{color:var(--gold)}
-  .modal input.search{width:100%;margin-top:9px;background:var(--bg-2);border:1px solid var(--line-faint);
-    border-radius:11px;padding:12px 13px;color:var(--ink);font-family:inherit;font-size:15px;outline:none}
-  .modal input.search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(242,193,78,.15)}
-  .results{max-height:46vh;overflow-y:auto;padding:7px}
-  .results::-webkit-scrollbar{width:9px}
-  .results::-webkit-scrollbar-thumb{background:#332f3e;border-radius:8px}
-  .res{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;
-    background:transparent;border:1px solid transparent;border-radius:10px;padding:11px 12px;
-    color:var(--ink);font-size:14.5px;font-weight:500}
-  .res:hover,.res.active{background:var(--surface-2);border-color:var(--line-faint)}
-  .res .cnt{font-family:"Space Mono",monospace;font-size:10.5px;color:var(--ink-dimmer)}
-  .empty{padding:22px 16px;color:var(--ink-dimmer);font-size:13.5px;text-align:center}
+/* ── CUSTOM MODAL ── */
+.m-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:800;padding:20px;backdrop-filter:blur(5px);}
+.modal{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:30px;max-width:450px;width:100%;position:relative;max-height:92vh;overflow-y:auto;}
+.m-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:22px;padding:4px 8px;line-height:1;}
+.m-close:hover{color:var(--text);}
+.modal h2{font-size:20px;margin-bottom:5px;}
+.m-sub{font-size:13px;color:var(--muted);margin-bottom:26px;}
+.m-group{margin-bottom:20px;}
+.m-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;}
+.m-wrap{position:relative;}
+.m-inp{width:100%;padding:11px 15px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;outline:none;font-family:inherit;}
+.m-inp:focus{border-color:var(--gold);}
+.m-inp::placeholder{color:var(--muted);}
+.m-drop{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;z-index:10;max-height:190px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.55);}
+.m-drop-item{padding:10px 15px;cursor:pointer;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.04);}
+.m-drop-item:last-child{border-bottom:none;}
+.m-drop-item:hover{background:rgba(240,198,64,.1);color:var(--gold);}
+.m-pill{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(240,198,64,.08);border:1px solid rgba(240,198,64,.3);border-radius:8px;font-size:14px;font-weight:700;color:var(--gold);}
+.m-pill button{background:none;border:none;color:var(--muted);font-size:18px;padding:0 0 0 10px;line-height:1;font-family:inherit;}
+.m-pill button:hover{color:var(--text);}
+.m-err{font-size:12px;color:var(--err);min-height:18px;margin:-12px 0 12px;}
+.share-box{margin-top:18px;display:none;}
+.share-box.show{display:block;}
+.share-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.share-row{display:flex;gap:8px;}
+.share-url{flex:1;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-family:monospace;overflow-wrap:anywhere;word-break:break-all;cursor:text;user-select:all;}
+.copy-btn{padding:9px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;transition:all .14s;font-family:inherit;}
+.copy-btn:hover{background:var(--surface-3);}
+.copy-btn.copied{color:var(--green);border-color:rgba(62,240,170,.3);}
+.m-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap;}
 
-  /* ── byline ── */
-  .byline{
-    text-align:center;margin-top:56px;
-    color:var(--ink-dimmer);font-family:"Space Mono",monospace;
-    font-size:10.5px;letter-spacing:.22em;text-transform:lowercase;
-  }
+/* ── FOOTER ── */
+footer{padding:18px 44px 26px;text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.06em;}
 
-  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
 
-  @media(max-width:680px){
-    :root{--node:128px}
-    .line{flex-direction:column;align-items:center;overflow-x:visible;gap:0}
-    .station{width:min(78vw,300px);flex-basis:auto}
-    .seg{width:auto;min-width:0;flex-basis:auto;padding-top:0;padding:14px 0;align-items:center}
-    .seg .rail{top:0;bottom:0;left:50%;right:auto;width:var(--rail);height:auto;transform:translateX(-50%)}
-    .seg.broken .rail{border-top:0;border-left:3px dashed rgba(194,97,74,.6);width:0;height:100%;left:50%}
-    .seg.pending .rail{border-left:none;width:var(--rail)}
-    .seg .song,.seg .addbtn{margin:0}
-    .seg .addhint{display:none}
-    .mode-row{gap:12px}
-    .mode-sep{display:none}
-  }
-  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* ── RESPONSIVE ── */
+@media(max-width:600px){.top-bar,.mode-bar,.stats-bar,.panel,.stats-bar{padding-left:16px;padding-right:16px;}.chain-scroll{padding:44px 20px 52px;}.win-card{padding:28px 24px;}.modal{padding:22px 18px;}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <h1>The&nbsp;Feature&nbsp;<span class="em">Chain</span></h1>
-      <div class="brand-chain" aria-hidden="true">
-        <b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
-      </div>
-      <p class="tag">Two rappers. Build a route between them, one shared song at a time. Click <b>+</b> to add a stop — the rail lights up gold when a <b>feature connects</b> them.</p>
-    </div>
-    <div class="ctrls">
-      <button class="btn ghost" id="hintBtn">Hint</button>
-      <button class="btn" id="solveBtn"><span class="dot"></span>Shortest path</button>
-      <button class="btn gold" id="newBtn">New matchup</button>
-    </div>
-  </header>
 
-  <div class="mode-row">
-    <div class="mode-group">
-      <span class="mode-label">Difficulty</span>
-      <div class="mode-toggle">
-        <button class="easy active" id="modeEasy">Easy</button>
-        <button class="hard" id="modeHard">Hard</button>
-      </div>
-      <span class="mode-badge easy" id="modeBadge">Top artists only</span>
-    </div>
-    <div class="mode-sep"></div>
-    <div class="mode-group">
-      <span class="mode-label">Challenge</span>
-      <button class="song-tog" id="songChalBtn">🎵 Name the Song</button>
-    </div>
+<!-- TOP BAR -->
+<div class="top-bar">
+  <p class="desc">Two rappers. Build a route between them, one shared song at a time.
+    Click <strong>+</strong> to add a stop — the rail lights up when a
+    <strong>feature connects</strong> them.</p>
+  <div class="top-btns">
+    <button class="btn btn-outline" id="hintBtn">Hint</button>
+    <button class="btn btn-outline" id="pathBtn"><span class="btn-dot"></span> Shortest path</button>
+    <button class="btn btn-gold" id="newBtn">New matchup</button>
   </div>
-
-  <div class="statusbar">
-    <span class="pill">Dataset: <b id="statSongs">0</b> songs · <b id="statArtists">0</b> artists</span>
-    <span class="pill live">Your chain: <b id="statHops">0</b> artists</span>
-    <span class="pill" id="statOptimal" style="display:none">Shortest known: <b id="statOptVal">–</b></span>
-  </div>
-
-  <div class="board">
-    <div class="line" id="line" aria-label="The feature chain"></div>
-    <div class="banner" id="banner" role="status">
-      <h2>Linked&nbsp;<span class="em" id="bannerHops"></span></h2>
-      <p id="bannerSub"></p>
-      <div class="row">
-        <button class="btn gold" id="bannerNew">New matchup</button>
-        <button class="btn" id="bannerSolve"><span class="dot"></span>Show shortest path</button>
-      </div>
-    </div>
-  </div>
-
-  <p class="byline">by Samik Shah</p>
 </div>
 
-<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Add an artist">
-  <div class="modal">
-    <div class="mhead">
-      <div class="lbl">Add a stop after <b id="afterName">—</b></div>
-      <input class="search" id="search" type="text" autocomplete="off" placeholder="Search artists…" />
+<!-- TITLE with chains between words -->
+<div class="title-area">
+  <div class="title-row">
+    <span class="title-word">The</span>
+    <div class="t-chain" aria-hidden="true">
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span>
     </div>
-    <div class="results" id="results"></div>
+    <span class="title-word">Feature</span>
+    <div class="t-chain" aria-hidden="true">
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span><span class="t-seg"></span>
+      <span class="t-dot"></span>
+    </div>
+    <span class="title-word">Line</span>
+  </div>
+</div>
+
+<!-- MODE BAR -->
+<div class="mode-bar">
+  <span class="mode-label">Difficulty</span>
+  <button class="pill active" data-diff="easy" id="dEasy">Easy</button>
+  <button class="pill" data-diff="hard" id="dHard">Hard</button>
+  <button class="pill" data-diff="full" id="dFull">Full Dataset</button>
+  <div class="mode-sep"></div>
+  <span class="mode-label">Challenge</span>
+  <button class="challenge-pill" id="challengeBtn">
+    <span class="ch-icon">♫</span> Name the Song
+  </button>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <span class="stat">Dataset: <strong id="sSongs">—</strong> songs · <strong id="sArtists">—</strong> artists</span>
+  <span class="stat">Your chain: <strong id="sChain">0</strong> artists</span>
+  <span class="stat">Shortest known: <strong id="sShortest">?</strong> artists</span>
+</div>
+
+<!-- PANELS -->
+<div class="panel panel-hint" id="hintPanel" style="display:none"></div>
+<div class="panel panel-path" id="pathPanel" style="display:none"></div>
+<div class="panel panel-err" id="errPanel" style="display:none"></div>
+
+<!-- CHAIN -->
+<div class="chain-area">
+  <div class="chain-scroll" id="chainScroll">
+    <div class="chain-row" id="chainRow"></div>
+  </div>
+</div>
+
+<footer>by Samik Shah &nbsp;·&nbsp; <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" id="customBtn">✦ Custom Game</button></footer>
+
+<!-- WIN OVERLAY -->
+<div class="win-overlay" id="winOverlay" style="display:none">
+  <div class="win-card">
+    <h2>🎉 Line Complete!</h2>
+    <p id="winMsg"></p>
+    <div class="win-acts">
+      <button class="btn btn-gold" id="winNew">New matchup</button>
+      <button class="btn btn-outline" id="winCustom">Custom Game</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM GAME MODAL -->
+<div class="m-overlay" id="customModal" style="display:none">
+  <div class="modal">
+    <button class="m-close" id="mClose">✕</button>
+    <h2>Custom Game</h2>
+    <p class="m-sub">Pick two artists and share the link with anyone.</p>
+
+    <div class="m-group">
+      <label class="m-label">Start Artist</label>
+      <div class="m-wrap" id="mStartWrap">
+        <input class="m-inp" id="mStartInp" placeholder="Search artists…" autocomplete="off">
+        <div class="m-drop" id="mStartDrop" style="display:none"></div>
+      </div>
+      <div class="m-pill" id="mStartPill" style="display:none">
+        <span id="mStartName"></span>
+        <button id="mStartClear">×</button>
+      </div>
+    </div>
+
+    <div class="m-group">
+      <label class="m-label">End Artist</label>
+      <div class="m-wrap" id="mEndWrap">
+        <input class="m-inp" id="mEndInp" placeholder="Search artists…" autocomplete="off">
+        <div class="m-drop" id="mEndDrop" style="display:none"></div>
+      </div>
+      <div class="m-pill" id="mEndPill" style="display:none">
+        <span id="mEndName"></span>
+        <button id="mEndClear">×</button>
+      </div>
+    </div>
+
+    <div class="m-err" id="mErr"></div>
+
+    <div class="share-box" id="shareBox">
+      <div class="share-lbl">Shareable Link</div>
+      <div class="share-row">
+        <div class="share-url" id="shareUrl"></div>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+    </div>
+
+    <div class="m-acts">
+      <button class="btn" id="mCancel">Cancel</button>
+      <button class="btn btn-outline" id="mLink">Get Link</button>
+      <button class="btn btn-gold" id="mPlay">Play</button>
+    </div>
   </div>
 </div>
 
 <script>
-const EMBEDDED_DATA = {"version":1,"songs":[{"title":"Angels","artists":["Chance the Rapper","Saba"]},{"title":"Everybody's Something","artists":["Chance the Rapper","Saba","BJ the Chicago Kid"]},{"title":"Ultralight Beam","artists":["Kanye West","Chance the Rapper","Kelly Price","The-Dream","Kirk Franklin"]},{"title":"Forever","artists":["Drake","Kanye West","Lil Wayne","Eminem"]},{"title":"Chicago Freestyle","artists":["Drake","Giveon"]},{"title":"Monster","artists":["Kanye West","Jay-Z","Rick Ross","Nicki Minaj","Bon Iver"]},{"title":"Mercy","artists":["Kanye West","Big Sean","Pusha T","2 Chainz"]},{"title":"No Church in the Wild","artists":["Jay-Z","Kanye West","Frank Ocean","The-Dream"]},{"title":"Clique","artists":["Kanye West","Jay-Z","Big Sean"]},{"title":"Run This Town","artists":["Jay-Z","Rihanna","Kanye West"]},{"title":"Otis","artists":["Jay-Z","Kanye West"]},{"title":"Swagga Like Us","artists":["Jay-Z","T.I.","Kanye West","Lil Wayne"]},{"title":"Renegade","artists":["Jay-Z","Eminem"]},{"title":"Empire State of Mind","artists":["Jay-Z","Alicia Keys"]},{"title":"Runaway","artists":["Kanye West","Pusha T"]},{"title":"All of the Lights","artists":["Kanye West","Rihanna","Kid Cudi"]},{"title":"FourFiveSeconds","artists":["Rihanna","Kanye West","Paul McCartney"]},{"title":"Champions","artists":["Kanye West","Gucci Mane","Big Sean","2 Chainz","Travis Scott","Yo Gotti","Quavo","Desiigner"]},{"title":"Birthday Song","artists":["2 Chainz","Kanye West"]},{"title":"I'm the One","artists":["DJ Khaled","Justin Bieber","Quavo","Chance the Rapper","Lil Wayne"]},{"title":"No Brainer","artists":["DJ Khaled","Justin Bieber","Chance the Rapper","Quavo"]},{"title":"Wild Thoughts","artists":["DJ Khaled","Rihanna","Bryson Tiller"]},{"title":"I'm on One","artists":["DJ Khaled","Drake","Rick Ross","Lil Wayne"]},{"title":"All I Do Is Win","artists":["DJ Khaled","T-Pain","Ludacris","Snoop Dogg","Rick Ross"]},{"title":"No New Friends","artists":["DJ Khaled","Drake","Rick Ross","Lil Wayne"]},{"title":"POPSTAR","artists":["DJ Khaled","Drake"]},{"title":"GREECE","artists":["DJ Khaled","Drake"]},{"title":"Take It to the Head","artists":["DJ Khaled","Chris Brown","Rick Ross","Nicki Minaj","Lil Wayne"]},{"title":"Top Off","artists":["DJ Khaled","Jay-Z","Future","Beyonce"]},{"title":"Loyalty.","artists":["Kendrick Lamar","Rihanna"]},{"title":"All The Stars","artists":["Kendrick Lamar","SZA"]},{"title":"Pray for Me","artists":["The Weeknd","Kendrick Lamar"]},{"title":"Sidewalks","artists":["The Weeknd","Kendrick Lamar"]},{"title":"Goosebumps","artists":["Travis Scott","Kendrick Lamar"]},{"title":"Big Shot","artists":["Kendrick Lamar","Travis Scott"]},{"title":"Family Ties","artists":["Baby Keem","Kendrick Lamar"]},{"title":"Range Brothers","artists":["Baby Keem","Kendrick Lamar"]},{"title":"Control","artists":["Big Sean","Kendrick Lamar","Jay Electronica"]},{"title":"Collard Greens","artists":["ScHoolboy Q","Kendrick Lamar"]},{"title":"Mona Lisa","artists":["Lil Wayne","Kendrick Lamar"]},{"title":"Forbidden Fruit","artists":["J. Cole","Kendrick Lamar"]},{"title":"These Walls","artists":["Kendrick Lamar","Bilal","Anna Wise","Thundercat"]},{"title":"Wesley's Theory","artists":["Kendrick Lamar","George Clinton","Thundercat"]},{"title":"Mask Off (Remix)","artists":["Future","Kendrick Lamar"]},{"title":"Sicko Mode","artists":["Travis Scott","Drake"]},{"title":"Portland","artists":["Drake","Quavo","Travis Scott"]},{"title":"Pick Up the Phone","artists":["Young Thug","Travis Scott","Quavo"]},{"title":"Watch","artists":["Travis Scott","Lil Uzi Vert","Kanye West"]},{"title":"Franchise","artists":["Travis Scott","Young Thug","M.I.A."]},{"title":"Beibs in the Trap","artists":["Travis Scott","Nav"]},{"title":"The London","artists":["Young Thug","J. Cole","Travis Scott"]},{"title":"Hot (Remix)","artists":["Young Thug","Gunna","Travis Scott"]},{"title":"Bubbly","artists":["Young Thug","Drake","Travis Scott"]},{"title":"Jumpman","artists":["Drake","Future"]},{"title":"Where Ya At","artists":["Future","Drake"]},{"title":"Low Life","artists":["Future","The Weeknd"]},{"title":"Life Is Good","artists":["Future","Drake"]},{"title":"Wait for U","artists":["Future","Drake","Tems"]},{"title":"Move That Dope","artists":["Future","Pharrell Williams","Pusha T"]},{"title":"Karate Chop (Remix)","artists":["Future","Lil Wayne"]},{"title":"X","artists":["21 Savage","Future"]},{"title":"Love Me","artists":["Lil Wayne","Drake","Future"]},{"title":"Bad and Boujee","artists":["Migos","Lil Uzi Vert"]},{"title":"MotorSport","artists":["Migos","Nicki Minaj","Cardi B"]},{"title":"Walk It Talk It","artists":["Migos","Drake"]},{"title":"Congratulations","artists":["Post Malone","Quavo"]},{"title":"Slippery","artists":["Migos","Gucci Mane"]},{"title":"I Get the Bag","artists":["Gucci Mane","Migos"]},{"title":"Rockstar","artists":["Post Malone","21 Savage"]},{"title":"Psycho","artists":["Post Malone","Ty Dolla $ign"]},{"title":"Wow (Remix)","artists":["Post Malone","Roddy Ricch","Tyga"]},{"title":"Sunflower","artists":["Post Malone","Swae Lee"]},{"title":"a lot","artists":["21 Savage","J. Cole"]},{"title":"Mr. Right Now","artists":["21 Savage","Drake"]},{"title":"Knife Talk","artists":["Drake","21 Savage","Project Pat"]},{"title":"Jimmy Cooks","artists":["Drake","21 Savage"]},{"title":"Rich Flex","artists":["Drake","21 Savage"]},{"title":"First Person Shooter","artists":["Drake","J. Cole"]},{"title":"My Life","artists":["J. Cole","21 Savage","Morray"]},{"title":"Pride Is the Devil","artists":["J. Cole","Lil Baby"]},{"title":"Drip Too Hard","artists":["Lil Baby","Gunna"]},{"title":"Yes Indeed","artists":["Lil Baby","Drake"]},{"title":"Wants and Needs","artists":["Drake","Lil Baby"]},{"title":"Never Recover","artists":["Lil Baby","Gunna","Drake"]},{"title":"Hurricane","artists":["Kanye West","The Weeknd","Lil Baby"]},{"title":"Solid","artists":["Young Thug","Gunna","Drake"]},{"title":"Ski","artists":["Young Thug","Gunna"]},{"title":"Go Crazy","artists":["Chris Brown","Young Thug"]},{"title":"WAP","artists":["Cardi B","Megan Thee Stallion"]},{"title":"Hot Girl Summer","artists":["Megan Thee Stallion","Nicki Minaj","Ty Dolla $ign"]},{"title":"Savage (Remix)","artists":["Megan Thee Stallion","Beyonce"]},{"title":"Sweetest Pie","artists":["Megan Thee Stallion","Dua Lipa"]},{"title":"Finesse (Remix)","artists":["Bruno Mars","Cardi B"]},{"title":"Bang Bang","artists":["Jessie J","Ariana Grande","Nicki Minaj"]},{"title":"Side to Side","artists":["Ariana Grande","Nicki Minaj"]},{"title":"Truffle Butter","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Moment 4 Life","artists":["Nicki Minaj","Drake"]},{"title":"No Frauds","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Seeing Green","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Bedrock","artists":["Lil Wayne","Drake","Nicki Minaj","Tyga","Gudda Gudda"]},{"title":"Lighters","artists":["Eminem","Royce da 5'9\"","Bruno Mars"]},{"title":"No Love","artists":["Eminem","Lil Wayne"]},{"title":"Drop the World","artists":["Lil Wayne","Eminem"]},{"title":"Smack That","artists":["Akon","Eminem"]},{"title":"Forgot About Dre","artists":["Dr. Dre","Eminem"]},{"title":"I Need a Doctor","artists":["Dr. Dre","Eminem","Skylar Grey"]},{"title":"Crack a Bottle","artists":["Eminem","Dr. Dre","50 Cent"]},{"title":"Patiently Waiting","artists":["50 Cent","Eminem"]},{"title":"The Next Episode","artists":["Dr. Dre","Snoop Dogg","Kurupt","Nate Dogg"]},{"title":"Still D.R.E.","artists":["Dr. Dre","Snoop Dogg"]},{"title":"Drop It Like It's Hot","artists":["Snoop Dogg","Pharrell Williams"]},{"title":"Young, Wild & Free","artists":["Snoop Dogg","Wiz Khalifa","Bruno Mars"]},{"title":"See You Again","artists":["Wiz Khalifa","Charlie Puth"]},{"title":"Sucker for Pain","artists":["Lil Wayne","Wiz Khalifa","Imagine Dragons","Logic","Ty Dolla $ign","X Ambassadors"]},{"title":"Erase Me","artists":["Kid Cudi","Kanye West"]},{"title":"Welcome to Heartbreak","artists":["Kanye West","Kid Cudi"]},{"title":"Make Her Say","artists":["Kid Cudi","Kanye West","Common"]},{"title":"Reborn","artists":["Kanye West","Kid Cudi"]},{"title":"Pursuit of Happiness","artists":["Kid Cudi","MGMT","Ratatat"]},{"title":"Crew Love","artists":["Drake","The Weeknd"]},{"title":"The Motto","artists":["Drake","Lil Wayne"]},{"title":"HYFR","artists":["Drake","Lil Wayne"]},{"title":"She Will","artists":["Lil Wayne","Drake"]},{"title":"Believe Me","artists":["Lil Wayne","Drake"]},{"title":"Grindin'","artists":["Lil Wayne","Drake"]},{"title":"Used To","artists":["Drake","Lil Wayne"]},{"title":"Pound Cake / Paris Morton Music 2","artists":["Drake","Jay-Z"]},{"title":"Light Up","artists":["Drake","Jay-Z"]},{"title":"Work","artists":["Rihanna","Drake"]},{"title":"Too Good","artists":["Drake","Rihanna"]},{"title":"What's My Name?","artists":["Rihanna","Drake"]},{"title":"Take Care","artists":["Drake","Rihanna"]},{"title":"Umbrella","artists":["Rihanna","Jay-Z"]},{"title":"Mine","artists":["Beyonce","Drake"]},{"title":"Loyal","artists":["Chris Brown","Lil Wayne","Tyga"]},{"title":"Crazy in Love","artists":["Beyonce","Jay-Z"]},{"title":"Deja Vu","artists":["Beyonce","Jay-Z"]},{"title":"No Problem","artists":["Chance the Rapper","Lil Wayne","2 Chainz"]},{"title":"Cocoa Butter Kisses","artists":["Chance the Rapper","Vic Mensa","Twista"]},{"title":"No Lie","artists":["2 Chainz","Drake"]},{"title":"Feds Watching","artists":["2 Chainz","Pharrell Williams"]},{"title":"Blessings","artists":["Big Sean","Drake","Kanye West"]},{"title":"Beware","artists":["Big Sean","Lil Wayne","Jhene Aiko"]},{"title":"I Know","artists":["Big Sean","Jhene Aiko"]},{"title":"Sativa","artists":["Jhene Aiko","Swae Lee"]},{"title":"Black Beatles","artists":["Rae Sremmurd","Gucci Mane"]},{"title":"Unforgettable","artists":["French Montana","Swae Lee"]},{"title":"Powerglide","artists":["Rae Sremmurd","Juicy J"]},{"title":"Wake Up in the Sky","artists":["Gucci Mane","Bruno Mars","Kodak Black"]},{"title":"Stay Schemin","artists":["Rick Ross","Drake","French Montana"]},{"title":"Pop That","artists":["French Montana","Rick Ross","Drake","Lil Wayne"]},{"title":"Diced Pineapples","artists":["Rick Ross","Wale","Drake"]},{"title":"Aston Martin Music","artists":["Rick Ross","Drake","Chrisette Michele"]},{"title":"Get Lucky","artists":["Daft Punk","Pharrell Williams"]},{"title":"Blurred Lines","artists":["Robin Thicke","T.I.","Pharrell Williams"]},{"title":"Live Your Life","artists":["T.I.","Rihanna"]},{"title":"Uptown Funk","artists":["Mark Ronson","Bruno Mars"]}]};
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const EMBEDDED = {"version":1,"songs":[{"title":"Angels","artists":["Chance the Rapper","Saba"]},{"title":"Everybody's Something","artists":["Chance the Rapper","Saba","BJ the Chicago Kid"]},{"title":"Ultralight Beam","artists":["Kanye West","Chance the Rapper","Kelly Price","The-Dream","Kirk Franklin"]},{"title":"Forever","artists":["Drake","Kanye West","Lil Wayne","Eminem"]},{"title":"Chicago Freestyle","artists":["Drake","Giveon"]},{"title":"Monster","artists":["Kanye West","Jay-Z","Rick Ross","Nicki Minaj","Bon Iver"]},{"title":"Mercy","artists":["Kanye West","Big Sean","Pusha T","2 Chainz"]},{"title":"No Church in the Wild","artists":["Jay-Z","Kanye West","Frank Ocean","The-Dream"]},{"title":"Clique","artists":["Kanye West","Jay-Z","Big Sean"]},{"title":"Run This Town","artists":["Jay-Z","Rihanna","Kanye West"]},{"title":"Otis","artists":["Jay-Z","Kanye West"]},{"title":"Swagga Like Us","artists":["Jay-Z","T.I.","Kanye West","Lil Wayne"]},{"title":"Renegade","artists":["Jay-Z","Eminem"]},{"title":"Empire State of Mind","artists":["Jay-Z","Alicia Keys"]},{"title":"Runaway","artists":["Kanye West","Pusha T"]},{"title":"All of the Lights","artists":["Kanye West","Rihanna","Kid Cudi"]},{"title":"FourFiveSeconds","artists":["Rihanna","Kanye West","Paul McCartney"]},{"title":"Champions","artists":["Kanye West","Gucci Mane","Big Sean","2 Chainz","Travis Scott","Yo Gotti","Quavo","Desiigner"]},{"title":"Birthday Song","artists":["2 Chainz","Kanye West"]},{"title":"I'm the One","artists":["DJ Khaled","Justin Bieber","Quavo","Chance the Rapper","Lil Wayne"]},{"title":"No Brainer","artists":["DJ Khaled","Justin Bieber","Chance the Rapper","Quavo"]},{"title":"Wild Thoughts","artists":["DJ Khaled","Rihanna","Bryson Tiller"]},{"title":"I'm on One","artists":["DJ Khaled","Drake","Rick Ross","Lil Wayne"]},{"title":"All I Do Is Win","artists":["DJ Khaled","T-Pain","Ludacris","Snoop Dogg","Rick Ross"]},{"title":"No New Friends","artists":["DJ Khaled","Drake","Rick Ross","Lil Wayne"]},{"title":"POPSTAR","artists":["DJ Khaled","Drake"]},{"title":"GREECE","artists":["DJ Khaled","Drake"]},{"title":"Take It to the Head","artists":["DJ Khaled","Chris Brown","Rick Ross","Nicki Minaj","Lil Wayne"]},{"title":"Top Off","artists":["DJ Khaled","Jay-Z","Future","Beyonce"]},{"title":"Loyalty.","artists":["Kendrick Lamar","Rihanna"]},{"title":"All The Stars","artists":["Kendrick Lamar","SZA"]},{"title":"Pray for Me","artists":["The Weeknd","Kendrick Lamar"]},{"title":"Sidewalks","artists":["The Weeknd","Kendrick Lamar"]},{"title":"Goosebumps","artists":["Travis Scott","Kendrick Lamar"]},{"title":"Big Shot","artists":["Kendrick Lamar","Travis Scott"]},{"title":"Family Ties","artists":["Baby Keem","Kendrick Lamar"]},{"title":"Range Brothers","artists":["Baby Keem","Kendrick Lamar"]},{"title":"Control","artists":["Big Sean","Kendrick Lamar","Jay Electronica"]},{"title":"Collard Greens","artists":["ScHoolboy Q","Kendrick Lamar"]},{"title":"Mona Lisa","artists":["Lil Wayne","Kendrick Lamar"]},{"title":"Forbidden Fruit","artists":["J. Cole","Kendrick Lamar"]},{"title":"These Walls","artists":["Kendrick Lamar","Bilal","Anna Wise","Thundercat"]},{"title":"Wesley's Theory","artists":["Kendrick Lamar","George Clinton","Thundercat"]},{"title":"Mask Off (Remix)","artists":["Future","Kendrick Lamar"]},{"title":"Sicko Mode","artists":["Travis Scott","Drake"]},{"title":"Portland","artists":["Drake","Quavo","Travis Scott"]},{"title":"Pick Up the Phone","artists":["Young Thug","Travis Scott","Quavo"]},{"title":"Watch","artists":["Travis Scott","Lil Uzi Vert","Kanye West"]},{"title":"Franchise","artists":["Travis Scott","Young Thug","M.I.A."]},{"title":"Beibs in the Trap","artists":["Travis Scott","Nav"]},{"title":"The London","artists":["Young Thug","J. Cole","Travis Scott"]},{"title":"Hot (Remix)","artists":["Young Thug","Gunna","Travis Scott"]},{"title":"Bubbly","artists":["Young Thug","Drake","Travis Scott"]},{"title":"Jumpman","artists":["Drake","Future"]},{"title":"Where Ya At","artists":["Future","Drake"]},{"title":"Low Life","artists":["Future","The Weeknd"]},{"title":"Life Is Good","artists":["Future","Drake"]},{"title":"Wait for U","artists":["Future","Drake","Tems"]},{"title":"Move That Dope","artists":["Future","Pharrell Williams","Pusha T"]},{"title":"Karate Chop (Remix)","artists":["Future","Lil Wayne"]},{"title":"X","artists":["21 Savage","Future"]},{"title":"Love Me","artists":["Lil Wayne","Drake","Future"]},{"title":"Bad and Boujee","artists":["Migos","Lil Uzi Vert"]},{"title":"MotorSport","artists":["Migos","Nicki Minaj","Cardi B"]},{"title":"Walk It Talk It","artists":["Migos","Drake"]},{"title":"Congratulations","artists":["Post Malone","Quavo"]},{"title":"Slippery","artists":["Migos","Gucci Mane"]},{"title":"I Get the Bag","artists":["Gucci Mane","Migos"]},{"title":"Rockstar","artists":["Post Malone","21 Savage"]},{"title":"Psycho","artists":["Post Malone","Ty Dolla $ign"]},{"title":"Wow (Remix)","artists":["Post Malone","Roddy Ricch","Tyga"]},{"title":"Sunflower","artists":["Post Malone","Swae Lee"]},{"title":"a lot","artists":["21 Savage","J. Cole"]},{"title":"Mr. Right Now","artists":["21 Savage","Drake"]},{"title":"Knife Talk","artists":["Drake","21 Savage","Project Pat"]},{"title":"Jimmy Cooks","artists":["Drake","21 Savage"]},{"title":"Rich Flex","artists":["Drake","21 Savage"]},{"title":"First Person Shooter","artists":["Drake","J. Cole"]},{"title":"My Life","artists":["J. Cole","21 Savage","Morray"]},{"title":"Pride Is the Devil","artists":["J. Cole","Lil Baby"]},{"title":"Drip Too Hard","artists":["Lil Baby","Gunna"]},{"title":"Yes Indeed","artists":["Lil Baby","Drake"]},{"title":"Wants and Needs","artists":["Drake","Lil Baby"]},{"title":"Never Recover","artists":["Lil Baby","Gunna","Drake"]},{"title":"Hurricane","artists":["Kanye West","The Weeknd","Lil Baby"]},{"title":"Solid","artists":["Young Thug","Gunna","Drake"]},{"title":"Ski","artists":["Young Thug","Gunna"]},{"title":"Go Crazy","artists":["Chris Brown","Young Thug"]},{"title":"WAP","artists":["Cardi B","Megan Thee Stallion"]},{"title":"Hot Girl Summer","artists":["Megan Thee Stallion","Nicki Minaj","Ty Dolla $ign"]},{"title":"Savage (Remix)","artists":["Megan Thee Stallion","Beyonce"]},{"title":"Sweetest Pie","artists":["Megan Thee Stallion","Dua Lipa"]},{"title":"Finesse (Remix)","artists":["Bruno Mars","Cardi B"]},{"title":"Bang Bang","artists":["Jessie J","Ariana Grande","Nicki Minaj"]},{"title":"Side to Side","artists":["Ariana Grande","Nicki Minaj"]},{"title":"Truffle Butter","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Moment 4 Life","artists":["Nicki Minaj","Drake"]},{"title":"No Frauds","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Seeing Green","artists":["Nicki Minaj","Drake","Lil Wayne"]},{"title":"Bedrock","artists":["Lil Wayne","Drake","Nicki Minaj","Tyga","Gudda Gudda"]},{"title":"Lighters","artists":["Eminem","Royce da 5'9\"","Bruno Mars"]},{"title":"No Love","artists":["Eminem","Lil Wayne"]},{"title":"Drop the World","artists":["Lil Wayne","Eminem"]},{"title":"Smack That","artists":["Akon","Eminem"]},{"title":"Forgot About Dre","artists":["Dr. Dre","Eminem"]},{"title":"I Need a Doctor","artists":["Dr. Dre","Eminem","Skylar Grey"]},{"title":"Crack a Bottle","artists":["Eminem","Dr. Dre","50 Cent"]},{"title":"Patiently Waiting","artists":["50 Cent","Eminem"]},{"title":"The Next Episode","artists":["Dr. Dre","Snoop Dogg","Kurupt","Nate Dogg"]},{"title":"Still D.R.E.","artists":["Dr. Dre","Snoop Dogg"]},{"title":"Drop It Like It's Hot","artists":["Snoop Dogg","Pharrell Williams"]},{"title":"Young, Wild & Free","artists":["Snoop Dogg","Wiz Khalifa","Bruno Mars"]},{"title":"See You Again","artists":["Wiz Khalifa","Charlie Puth"]},{"title":"Sucker for Pain","artists":["Lil Wayne","Wiz Khalifa","Imagine Dragons","Logic","Ty Dolla $ign","X Ambassadors"]},{"title":"Erase Me","artists":["Kid Cudi","Kanye West"]},{"title":"Welcome to Heartbreak","artists":["Kanye West","Kid Cudi"]},{"title":"Make Her Say","artists":["Kid Cudi","Kanye West","Common"]},{"title":"Reborn","artists":["Kanye West","Kid Cudi"]},{"title":"Pursuit of Happiness","artists":["Kid Cudi","MGMT","Ratatat"]},{"title":"Crew Love","artists":["Drake","The Weeknd"]},{"title":"The Motto","artists":["Drake","Lil Wayne"]},{"title":"HYFR","artists":["Drake","Lil Wayne"]},{"title":"She Will","artists":["Lil Wayne","Drake"]},{"title":"Believe Me","artists":["Lil Wayne","Drake"]},{"title":"Grindin'","artists":["Lil Wayne","Drake"]},{"title":"Used To","artists":["Drake","Lil Wayne"]},{"title":"Pound Cake / Paris Morton Music 2","artists":["Drake","Jay-Z"]},{"title":"Light Up","artists":["Drake","Jay-Z"]},{"title":"Work","artists":["Rihanna","Drake"]},{"title":"Too Good","artists":["Drake","Rihanna"]},{"title":"What's My Name?","artists":["Rihanna","Drake"]},{"title":"Take Care","artists":["Drake","Rihanna"]},{"title":"Umbrella","artists":["Rihanna","Jay-Z"]},{"title":"Mine","artists":["Beyonce","Drake"]},{"title":"Loyal","artists":["Chris Brown","Lil Wayne","Tyga"]},{"title":"Crazy in Love","artists":["Beyonce","Jay-Z"]},{"title":"Deja Vu","artists":["Beyonce","Jay-Z"]},{"title":"No Problem","artists":["Chance the Rapper","Lil Wayne","2 Chainz"]},{"title":"Cocoa Butter Kisses","artists":["Chance the Rapper","Vic Mensa","Twista"]},{"title":"No Lie","artists":["2 Chainz","Drake"]},{"title":"Feds Watching","artists":["2 Chainz","Pharrell Williams"]},{"title":"Blessings","artists":["Big Sean","Drake","Kanye West"]},{"title":"Beware","artists":["Big Sean","Lil Wayne","Jhene Aiko"]},{"title":"I Know","artists":["Big Sean","Jhene Aiko"]},{"title":"Sativa","artists":["Jhene Aiko","Swae Lee"]},{"title":"Black Beatles","artists":["Rae Sremmurd","Gucci Mane"]},{"title":"Unforgettable","artists":["French Montana","Swae Lee"]},{"title":"Powerglide","artists":["Rae Sremmurd","Juicy J"]},{"title":"Wake Up in the Sky","artists":["Gucci Mane","Bruno Mars","Kodak Black"]},{"title":"Stay Schemin","artists":["Rick Ross","Drake","French Montana"]},{"title":"Pop That","artists":["French Montana","Rick Ross","Drake","Lil Wayne"]},{"title":"Diced Pineapples","artists":["Rick Ross","Wale","Drake"]},{"title":"Aston Martin Music","artists":["Rick Ross","Drake","Chrisette Michele"]},{"title":"Get Lucky","artists":["Daft Punk","Pharrell Williams"]},{"title":"Blurred Lines","artists":["Robin Thicke","T.I.","Pharrell Williams"]},{"title":"Live Your Life","artists":["T.I.","Rihanna"]},{"title":"Uptown Funk","artists":["Mark Ronson","Bruno Mars"]}]};
 
-// ── Top ~250 most-streamed artists of all time (used for Easy mode filter) ──
-const TOP_ARTISTS_ALL_TIME = new Set([
-  // All artists from the 157-song seed (exact spellings from data.json)
-  "Drake","Kanye West","Jay-Z","Eminem","Lil Wayne","Kendrick Lamar",
-  "J. Cole","Nicki Minaj","Future","Travis Scott","21 Savage","Lil Baby",
-  "Gunna","Young Thug","Migos","DJ Khaled","Rick Ross","2 Chainz","Big Sean",
-  "Dr. Dre","Snoop Dogg","50 Cent","Kid Cudi","The Weeknd","Chance the Rapper",
-  "Saba","Post Malone","Cardi B","Megan Thee Stallion","Rihanna","Beyonce",
-  "Jay Electronica","ScHoolboy Q","Thundercat","George Clinton","Pharrell Williams",
-  "Lil Uzi Vert","M.I.A.","Nav","Tems","Swae Lee","Juicy J","Kodak Black",
-  "French Montana","Daft Punk","Robin Thicke","T.I.","Mark Ronson","Charlie Puth",
-  "Pusha T","BJ the Chicago Kid","Bryson Tiller","Vic Mensa","Twista","Jhene Aiko",
-  "Rae Sremmurd","Wale","Chris Brown","Gucci Mane","Quavo","SZA","Baby Keem",
-  "Ludacris","Justin Bieber","Frank Ocean","Tyga","Roddy Ricch","Bruno Mars",
-  "Ariana Grande","Jessie J","Wiz Khalifa","Ty Dolla $ign","Logic","Imagine Dragons",
-  "X Ambassadors","MGMT","Ratatat","Paul McCartney","Bilal","Anna Wise","Bon Iver",
-  "Desiigner","Yo Gotti","Kelly Price","The-Dream","Kirk Franklin","Giveon",
-  "T-Pain","Kurupt","Nate Dogg","Skylar Grey","Chrisette Michele","Morray",
-  "Project Pat","Dua Lipa","Royce da 5'9\"",
-  // Extended top all-time
-  "A$AP Rocky","Tyler, the Creator","Childish Gambino","Mac Miller",
-  "Juice WRLD","XXXTentacion","Pop Smoke","Playboi Carti","Trippie Redd",
-  "Polo G","Rod Wave","Lil Durk","DaBaby","Jack Harlow","Don Toliver",
-  "NBA YoungBoy","NLE Choppa","Lil Tecca","Machine Gun Kelly","Meek Mill",
-  "A Boogie wit da Hoodie","Kevin Gates","Moneybagg Yo","Fetty Wap","6ix9ine",
-  "Isaiah Rashad","Ab-Soul","Jay Rock","Nipsey Hussle","YG","Brent Faiyaz",
-  "Summer Walker","H.E.R.","Kehlani","Khalid","6LACK","August Alsina",
-  "Trey Songz","Jeremih","Mary J. Blige","Alicia Keys","John Legend","Usher",
-  "Ne-Yo","Justin Timberlake","Timbaland","Missy Elliott","Busta Rhymes",
-  "Lil Kim","Nelly","Flo Rida","Pitbull","Jason Derulo","Akon","Soulja Boy",
-  "André 3000","Big Boi","CeeLo Green","Scarface","Bun B","Fat Joe","Ja Rule",
-  "DMX","The Game","Young Jeezy","Waka Flocka Flame","Big K.R.I.T.",
-  "Freddie Gibbs","Denzel Curry","J.I.D","Anderson .Paak","Billie Eilish",
-  "Halsey","Camila Cabello","Selena Gomez","Ed Sheeran","Sam Smith",
-  "Taylor Swift","Katy Perry","Lady Gaga","Coldplay","Wizkid","Burna Boy",
-  "Davido","Lauryn Hill","Wyclef Jean","D'Angelo","Erykah Badu","Normani",
-  "Tinashe","Smino","Ari Lennox","Lucky Daye","PnB Rock","PartyNextDoor",
-  "dvsn","Fivio Foreign","Lil Tjay","Toosii","EST Gee","Blxst","Lil Yachty",
-  "Rich the Kid","Ski Mask the Slump God","Ghostface Killah","Raekwon",
-  "Method Man","Redman","Nas","Common","Talib Kweli","Mos Def","MF DOOM",
-  "Ice Cube","Eve","Queen Latifah","Cam'ron","Juelz Santana","Lloyd Banks",
-  "Omarion","Bow Wow","Tank","Joe","Toni Braxton","Monica","Brandy",
-  "42 Dugg","Key Glock","Young Dolph","Rylo Rodriguez","Lil Mosey","YNW Melly",
-  "Offset","Takeoff","Lil Skies","B.o.B","Ace Hood","Jim Jones","Waka Flocka Flame",
-  "Raphael Saadiq","Anderson Paak","Kaytranada","PJ Morton","Jazmine Sullivan",
-  "Victoria Monet","Kiana Lede","Lucky Daye","PARTYNEXTDOOR","Roy Woods",
-  "Lil Peep","Bones","Night Lovell","Pouya","Ghostemane",
-  "Curren$y","Smoke DZA","Madlib","Flying Lotus","Thundercat",
-  "Ginuwine","Tyrese","Tank","R. Kelly","Jodeci","Boyz II Men",
-  "Keith Sweat","Avant","Jacquees","Pleasure P","Mario","Ne-Yo",
-  "Foxy Brown","Trina","Lil Mama","Iggy Azalea","Nicki Minaj",
-  "Coi Leray","GloRilla","Glorilla","Latto","Yung Miami","JT",
-  "City Girls","Saweetie","Doja Cat","Rico Nasty","Asian Doll",
-  "Don Toliver","Gunna","Lil Baby","Polo G","Rod Wave",
-  "Pooh Shiesty","Mozzy","Bino Rideaux","Blxst","Buddy",
-  "IDK","Earthgang","6LACK","Brent Faiyaz","DRAM","Broccoli",
-  "Wale","J.I.D","JID","EarthGang","Lute","Omen","Cozz",
-]);
+let songs = [], allArtists = [], graph = new Map();
 
-// ── state ──────────────────────────────────────────────────
-let FULL_DATA = EMBEDDED_DATA;
-let DATA = EMBEDDED_DATA;
-let MODE = "easy";
-let SONG_CHALLENGE = false;
-let confirmedPairs = new Set();
-
-let ARTISTS = [];
-let ADJ = new Map();
-let PAIR = new Map();
-let COMP = new Map();
-let start = null, end = null;
-let chain = [];
-let solved = false;
-let activeIdx = 0;
-
-const $ = s => document.querySelector(s);
-const pairKey = (a,b) => a < b ? a+"\u0000"+b : b+"\u0000"+a;
-
-// ── data filtering ──────────────────────────────────────────
-function filterEasy(full) {
-  const songs = full.songs.filter(s =>
-    s.artists.every(a => TOP_ARTISTS_ALL_TIME.has(a))
-  );
-  return { version: full.version, songs };
-}
-
-function applyMode(mode) {
-  MODE = mode;
-  DATA = mode === "easy" ? filterEasy(FULL_DATA) : FULL_DATA;
-  $("#modeEasy").classList.toggle("active", mode === "easy");
-  $("#modeHard").classList.toggle("active", mode === "hard");
-  const badge = $("#modeBadge");
-  badge.className = "mode-badge " + mode;
-  badge.textContent = mode === "easy" ? "Top artists only" : "Full dataset";
-  confirmedPairs = new Set();
-  buildIndex();
-  start = null; end = null; chain = []; solved = false;
-  newMatchup();
-}
-
-function toggleSongChallenge() {
-  SONG_CHALLENGE = !SONG_CHALLENGE;
-  const btn = $("#songChalBtn");
-  btn.classList.toggle("on", SONG_CHALLENGE);
-  confirmedPairs = new Set();
-  render();
-}
-
-// ── graph ──────────────────────────────────────────────────
-function buildIndex() {
-  ADJ = new Map(); PAIR = new Map();
+function buildGraph(list) {
+  graph = new Map();
   const aset = new Set();
-  for (const s of DATA.songs) {
-    const m = [...new Set(s.artists || [])];
-    m.forEach(a => aset.add(a));
-    for (let i = 0; i < m.length; i++) for (let j = i+1; j < m.length; j++) {
-      const a=m[i], b=m[j], k=pairKey(a,b);
-      if (!ADJ.has(a)) ADJ.set(a, new Set());
-      if (!ADJ.has(b)) ADJ.set(b, new Set());
-      ADJ.get(a).add(b); ADJ.get(b).add(a);
-      if (!PAIR.has(k)) PAIR.set(k, []);
-      if (!PAIR.get(k).includes(s.title)) PAIR.get(k).push(s.title);
+  for (const s of list) {
+    for (const a of s.artists) {
+      aset.add(a);
+      if (!graph.has(a)) graph.set(a, new Map());
     }
+    for (let i = 0; i < s.artists.length; i++)
+      for (let j = i+1; j < s.artists.length; j++) {
+        const a=s.artists[i], b=s.artists[j];
+        if (!graph.get(a).has(b)) graph.get(a).set(b,[]);
+        if (!graph.get(b).has(a)) graph.get(b).set(a,[]);
+        graph.get(a).get(b).push(s.title);
+        graph.get(b).get(a).push(s.title);
+      }
   }
-  ARTISTS = [...aset].sort((x,y) => x.localeCompare(y));
-  COMP = new Map(); let cid = 0;
-  for (const n of ARTISTS) {
-    if (COMP.has(n)) continue;
-    const stack = [n]; COMP.set(n, cid);
-    while (stack.length) {
-      const x = stack.pop();
-      for (const y of (ADJ.get(x) || [])) if (!COMP.has(y)) { COMP.set(y, cid); stack.push(y); }
-    }
-    cid++;
-  }
-  $("#statSongs").textContent = DATA.songs.length;
-  $("#statArtists").textContent = ARTISTS.length;
+  allArtists = [...aset].sort((a,b)=>a.localeCompare(b));
 }
 
-function songsBetween(a,b) { return PAIR.get(pairKey(a,b)) || []; }
-function linked(a,b) { return songsBetween(a,b).length > 0; }
-
-function bfsPath(src,dst) {
-  if (src===dst) return [src];
-  const prev = new Map([[src,null]]); const q = [src];
+function bfs(start, end) {
+  if (start===end) return [start];
+  const q=[[start,[start]]], vis=new Set([start]);
   while (q.length) {
-    const x = q.shift();
-    for (const y of (ADJ.get(x) || [])) {
-      if (!prev.has(y)) {
-        prev.set(y,x);
-        if (y===dst) {
-          const p=[]; let c=dst; while(c!==null){p.push(c);c=prev.get(c);} return p.reverse();
-        }
-        q.push(y);
-      }
+    const [cur,path]=q.shift();
+    for (const [nb] of (graph.get(cur)||new Map())) {
+      if (nb===end) return [...path,nb];
+      if (!vis.has(nb)) { vis.add(nb); q.push([nb,[...path,nb]]); }
     }
   }
   return null;
 }
 
-function nodes() { return [start, ...chain, end]; }
-function artistWord(n) { return n+" artist"+(n===1?"":"s"); }
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let G = {
+  start:null, end:null,
+  fullChain:[],   // [start, ...intermediates] — end appended when won
+  songLinks:[],   // songLinks[i] links fullChain[i]→fullChain[i+1]
+  won:false,
+  sp:null,        // shortest path array
+  diff:'easy',
+  songMode:false, // false=artist input, true=song input
+  inputOpen:false,
+  pendingSong:null,
+  artistPicks:[],
+  inputVal:'',
+  dropMatches:[],
+  showPath:false,
+  hintIdx:0,
+};
 
-// ── render ─────────────────────────────────────────────────
-function render() {
-  const ns = nodes();
-  const line = $("#line"); line.innerHTML = "";
-  const allLinked = ns.every((n,i) => i===0 || linked(ns[i-1], n));
-  const allConfirmed = !SONG_CHALLENGE || ns.every((n,i) => i===0 || confirmedPairs.has(pairKey(ns[i-1],n)));
-  const win = allLinked && allConfirmed && ns.length >= 2;
-
-  ns.forEach((name, i) => {
-    const terminal = (i===0 || i===ns.length-1);
-    const role = i===0 ? "start" : (i===ns.length-1 ? "end" : "mid");
-    const st = document.createElement("div");
-    st.className = "station "+role+(terminal?" terminal":"");
-    const linkedNode = (i>0 && linked(ns[i-1],name)) || (i<ns.length-1 && linked(name,ns[i+1]));
-    if (linkedNode) st.classList.add("linked");
-    st.innerHTML = `
-      <div class="stationcard">
-        <span class="marker">${i===0?"Start":(i===ns.length-1?"Target":"Stop "+i)}</span>
-        <span class="aname">${escapeHtml(name)}</span>
-      </div>
-      <div class="nodepip"></div>`;
-    if (role==="mid") {
-      const rm = document.createElement("button");
-      rm.className="remove"; rm.title="Remove "+name;
-      rm.setAttribute("aria-label","Remove "+name);
-      rm.textContent="✕";
-      rm.onclick = () => { chain.splice(i-1,1); confirmedPairs.delete(pairKey(ns[i-1],name)); confirmedPairs.delete(pairKey(name,ns[i+1])); solved=false; render(); };
-      st.appendChild(rm);
-    }
-    line.appendChild(st);
-
-    if (i < ns.length-1) {
-      const a=name, b=ns[i+1];
-      const songs = songsBetween(a,b);
-      const isLink = songs.length > 0;
-      const confirmed = confirmedPairs.has(pairKey(a,b));
-      const isAddSlot = (i === ns.length-2) && !win;
-      const seg = document.createElement("div");
-      const rail = `<div class="rail"></div>`;
-
-      if (isLink && SONG_CHALLENGE && !confirmed) {
-        // ── pending: ask for song name ──
-        seg.className = "seg pending";
-        seg.innerHTML = rail + `<div class="song pending-box">
-          <span class="ft">name the song</span>
-          <div class="sinput-wrap">
-            <input class="sinput" type="text" autocomplete="off" placeholder="song title…" />
-            <button class="schk">✓</button>
-          </div>
-        </div>`;
-        const inp = seg.querySelector(".sinput");
-        const btn = seg.querySelector(".schk");
-        const doCheck = () => {
-          const g = inp.value.trim().toLowerCase();
-          if (g.length < 3) return;
-          if (songs.some(s => s.toLowerCase().includes(g))) {
-            confirmedPairs.add(pairKey(a,b));
-            render();
-          } else {
-            inp.classList.remove("shake");
-            void inp.offsetWidth;
-            inp.classList.add("shake");
-            inp.select();
-          }
-        };
-        btn.onclick = doCheck;
-        inp.onkeydown = e => { if (e.key==="Enter") { e.preventDefault(); doCheck(); } };
-        setTimeout(() => { try { seg.querySelector(".sinput").focus(); } catch(_){} }, 0);
-
-      } else if (isLink) {
-        // ── normal linked ──
-        seg.className = "seg linked";
-        const more = songs.length>1 ? `<span class="more"> +${songs.length-1} more</span>` : "";
-        seg.innerHTML = rail + `<div class="song"><span class="ft">feat.</span>${escapeHtml(songs[0])}${more}</div>`;
-
-      } else if (isAddSlot) {
-        // ── add button ──
-        seg.className = "seg";
-        seg.innerHTML = rail +
-          `<button class="addbtn" title="Add a stop">+</button>` +
-          `<span class="addhint">add stop</span>`;
-        seg.querySelector(".addbtn").onclick = () => openSearch(a);
-
-      } else {
-        // ── broken ──
-        seg.className = "seg broken";
-        seg.innerHTML = rail + `<div class="song">no link yet</div>`;
-      }
-      line.appendChild(seg);
-    }
-  });
-
-  $("#statHops").textContent = chain.length;
-  const banner = $("#banner");
-  if (win) {
-    banner.classList.add("show");
-    $("#bannerHops").textContent = "through "+artistWord(chain.length);
-    const opt = currentOptimal();
-    $("#bannerSub").textContent = solved
-      ? "That's the shortest known route."
-      : (opt!=null && chain.length===opt ? "And that's the shortest possible — clean." :
-         (opt!=null ? `Shortest possible is ${artistWord(opt)}. Try to beat your own route.` : ""));
-  } else {
-    banner.classList.remove("show");
-  }
+// ═══════════════════════════════════════════
+//  GAME FLOW
+// ═══════════════════════════════════════════
+function rand(exc=[]) {
+  const p=allArtists.filter(a=>!exc.includes(a));
+  return p[Math.floor(Math.random()*p.length)];
 }
 
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
-function currentOptimal() {
-  if (!start||!end) return null;
-  const p = bfsPath(start,end);
-  return p ? Math.max(0, p.length-2) : null;
+function diffOK(len) {
+  if (G.diff==='easy') return len>=1 && len<=2;
+  if (G.diff==='hard') return len>=3;
+  return len>=1;
 }
 
-function newMatchup() {
-  confirmedPairs = new Set();
-  const byComp = {};
-  for (const [n,c] of COMP) (byComp[c]=byComp[c]||[]).push(n);
-  const big = Object.values(byComp).sort((a,b)=>b.length-a.length)[0];
-  let a, b, tries = 0;
+function newGame() {
+  let s,e,path,tries=0;
   do {
-    a = big[(Math.random()*big.length)|0];
-    const dist = new Map([[a,0]]); const q = [a];
-    while (q.length) { const x=q.shift(); for (const y of (ADJ.get(x)||[])) if (!dist.has(y)) { dist.set(y,dist.get(x)+1); q.push(y); } }
-    const cand = [...dist].filter(([n,d])=>d>=2&&d<=5).map(([n])=>n);
-    if (cand.length) b = cand[(Math.random()*cand.length)|0];
-    tries++;
-  } while (!b && tries < 40);
-  if (!b) b = big.find(x=>x!==a);
-  start=a; end=b; chain=[]; solved=false;
-  const opt = currentOptimal();
-  $("#statOptimal").style.display = "inline-block";
-  $("#statOptVal").textContent = opt!=null ? artistWord(opt) : "–";
-  render();
-}
-
-function solve() {
-  const p = bfsPath(start,end);
-  if (!p) return;
-  chain = p.slice(1,-1);
-  solved = true;
-  if (SONG_CHALLENGE) {
-    for (let i=1; i<p.length; i++) confirmedPairs.add(pairKey(p[i-1],p[i]));
+    s=rand(); e=rand([s]); path=bfs(s,e); tries++;
+  } while((!path||!diffOK(path.length-2))&&tries<500);
+  if (!path||!diffOK(path.length-2)) {
+    tries=0;
+    do { s=rand(); e=rand([s]); path=bfs(s,e); tries++; }
+    while((!path||path.length<2)&&tries<200);
   }
-  render();
+  startGame(s, e, path);
 }
 
-function hint() {
-  if (solved) return;
-  const ns = nodes();
-  const frontier = ns[ns.length-2];
-  if (linked(frontier,end)) return;
-  const p = bfsPath(frontier,end);
-  if (!p||p.length<2) return;
-  const next = p[1];
-  if (next===end) return;
-  if (!chain.includes(next)) {
-    chain.push(next);
-    if (SONG_CHALLENGE) confirmedPairs.add(pairKey(frontier,next));
-  }
-  render();
-}
-
-let searchAfter = null;
-function openSearch(afterName) {
-  searchAfter = afterName;
-  $("#afterName").textContent = afterName;
-  $("#scrim").classList.add("show");
-  const inp = $("#search"); inp.value=""; renderResults("");
-  setTimeout(()=>inp.focus(),10);
-}
-function closeSearch() { $("#scrim").classList.remove("show"); }
-
-function candidateList(q) {
-  const used = new Set([start,end,...chain]);
-  q = q.trim().toLowerCase();
-  let list = ARTISTS.filter(a=>!used.has(a));
-  if (q) list = list.filter(a=>a.toLowerCase().includes(q));
-  list.sort((x,y)=>{
-    const sx=x.toLowerCase().startsWith(q)?0:1, sy=y.toLowerCase().startsWith(q)?0:1;
-    if (q&&sx!==sy) return sx-sy;
-    const cx=(ADJ.get(x)||[]).size, cy=(ADJ.get(y)||[]).size;
-    if (cx!==cy) return cy-cx;
-    return x.localeCompare(y);
-  });
-  return list.slice(0,40);
-}
-
-function renderResults(q) {
-  const box = $("#results"); box.innerHTML=""; activeIdx=0;
-  const list = candidateList(q);
-  if (!list.length) { box.innerHTML=`<div class="empty">No artist matches "${escapeHtml(q)}".</div>`; return; }
-  list.forEach((name,idx) => {
-    const deg = (ADJ.get(name)||[]).size;
-    const b = document.createElement("button");
-    b.className = "res"+(idx===0?" active":"");
-    b.innerHTML = `<span>${escapeHtml(name)}</span><span class="cnt">${deg} collab${deg===1?"":"s"}</span>`;
-    b.onclick = () => pick(name);
-    box.appendChild(b);
-  });
-}
-
-function pick(name) {
-  chain.push(name); solved=false;
-  closeSearch(); render();
-}
-
-function wire() {
-  $("#newBtn").onclick = newMatchup;
-  $("#bannerNew").onclick = newMatchup;
-  $("#solveBtn").onclick = solve;
-  $("#bannerSolve").onclick = solve;
-  $("#hintBtn").onclick = hint;
-  $("#modeEasy").onclick = () => applyMode("easy");
-  $("#modeHard").onclick = () => applyMode("hard");
-  $("#songChalBtn").onclick = toggleSongChallenge;
-  $("#search").oninput = e => renderResults(e.target.value);
-  $("#search").onkeydown = e => {
-    const items = [...document.querySelectorAll(".res")];
-    if (e.key==="ArrowDown"){e.preventDefault(); activeIdx=Math.min(activeIdx+1,items.length-1);}
-    else if (e.key==="ArrowUp"){e.preventDefault(); activeIdx=Math.max(activeIdx-1,0);}
-    else if (e.key==="Enter"){e.preventDefault(); items[activeIdx]&&items[activeIdx].click(); return;}
-    else if (e.key==="Escape"){closeSearch(); return;}
-    items.forEach((it,i)=>it.classList.toggle("active",i===activeIdx));
-    if (items[activeIdx]) items[activeIdx].scrollIntoView({block:"nearest"});
+function startGame(s, e, knownPath) {
+  G = { ...G,
+    start:s, end:e,
+    fullChain:[s], songLinks:[],
+    won:false, sp:knownPath||bfs(s,e),
+    inputOpen:false, pendingSong:null, artistPicks:[],
+    inputVal:'', dropMatches:[],
+    showPath:false, hintIdx:0,
   };
-  $("#scrim").onclick = e => { if (e.target.id==="scrim") closeSearch(); };
-  document.addEventListener("keydown", e => { if (e.key==="Escape") closeSearch(); });
+  document.getElementById('winOverlay').style.display='none';
+  document.getElementById('hintPanel').style.display='none';
+  document.getElementById('pathPanel').style.display='none';
+  document.getElementById('errPanel').style.display='none';
+  updateStats();
+  renderChain();
 }
 
-async function init() {
-  try {
-    const r = await fetch("data.json",{cache:"no-store"});
-    if (r.ok) { const j=await r.json(); if (j&&Array.isArray(j.songs)&&j.songs.length) FULL_DATA=j; }
-  } catch(_) {}
-  DATA = filterEasy(FULL_DATA);
-  buildIndex();
-  wire();
-  newMatchup();
+function updateStats() {
+  document.getElementById('sSongs').textContent=songs.length;
+  document.getElementById('sArtists').textContent=allArtists.length;
+  const intermediates = G.won ? G.fullChain.length-2 : G.fullChain.length-1;
+  document.getElementById('sChain').textContent=Math.max(0,intermediates);
+  document.getElementById('sShortest').textContent=G.sp ? Math.max(0,G.sp.length-2) : '?';
 }
+
+function lastInChain() { return G.fullChain[G.fullChain.length-1]; }
+
+// ═══════════════════════════════════════════
+//  INPUT LOGIC
+// ═══════════════════════════════════════════
+function eligible(song) {
+  const last=lastInChain();
+  return song.artists.filter(a=>{
+    if (a===last) return false;
+    if (a===G.end) return true;
+    return !G.fullChain.includes(a);
+  });
+}
+
+function songMatches(q) {
+  if (!q.trim()) return [];
+  const last=lastInChain(), ql=q.toLowerCase();
+  return songs.filter(s=>s.artists.includes(last)&&eligible(s).length>0&&s.title.toLowerCase().includes(ql)).slice(0,10);
+}
+
+function artistMatches(q) {
+  if (!q.trim()) return [];
+  const last=lastInChain(), ql=q.toLowerCase();
+  const nb=graph.get(last)||new Map();
+  return [...nb.keys()].filter(a=>{
+    if (a===G.end?false:G.fullChain.includes(a)) return false;
+    return a.toLowerCase().includes(ql);
+  }).sort().slice(0,10);
+}
+
+function pickSong(song) {
+  const picks=eligible(song);
+  if (!picks.length) { showErr('No new artists available from this song.'); return; }
+  if (picks.length===1) commit(picks[0],song.title);
+  else {
+    G.pendingSong=song; G.artistPicks=picks;
+    G.inputVal=''; G.dropMatches=[];
+    renderChain();
+  }
+}
+
+function pickArtist(artist) {
+  const last=lastInChain();
+  const sgs=graph.get(last)?.get(artist)||[];
+  if (!sgs.length) { showErr("These artists don't share a song."); return; }
+  commit(artist, sgs[0]);
+}
+
+function commit(artist, songTitle) {
+  G.fullChain.push(artist);
+  G.songLinks.push(songTitle);
+  G.pendingSong=null; G.artistPicks=[];
+  G.inputVal=''; G.dropMatches=[];
+  G.inputOpen=false;
+  if (artist===G.end) {
+    G.won=true;
+    updateStats();
+    renderChain();
+    setTimeout(()=>{
+      const hops=G.fullChain.length-2;
+      const sp=G.sp?G.sp.length-2:'?';
+      document.getElementById('winMsg').textContent=
+        `Connected in ${hops} hop${hops!==1?'s':''} — shortest possible: ${sp}.`;
+      document.getElementById('winOverlay').style.display='flex';
+    },350);
+  } else {
+    updateStats();
+    renderChain();
+  }
+}
+
+function cancelPick() {
+  G.pendingSong=null; G.artistPicks=[];
+  G.inputOpen=false;
+  renderChain();
+}
+
+function openInput() {
+  G.inputOpen=true; G.inputVal=''; G.dropMatches=[];
+  renderChain();
+  setTimeout(()=>document.getElementById('mainInp')?.focus(),40);
+}
+
+function showErr(msg) {
+  const p=document.getElementById('errPanel');
+  p.textContent=msg; p.style.display='block';
+  clearTimeout(showErr._t);
+  showErr._t=setTimeout(()=>p.style.display='none',3500);
+}
+
+// ═══════════════════════════════════════════
+//  HINTS / PATH
+// ═══════════════════════════════════════════
+document.getElementById('hintBtn').onclick=()=>{
+  const hp=document.getElementById('hintPanel');
+  const sp=G.sp;
+  if (!sp||sp.length<2) { hp.innerHTML='<p>No hint available.</p>'; hp.style.display='block'; return; }
+  const cur=G.fullChain.length;
+  if (cur>=sp.length) {
+    hp.innerHTML='<p>You\'ve found the optimal path already!</p>';
+  } else {
+    const from=sp[cur-1], to=sp[cur];
+    const via=(graph.get(from)?.get(to)||[])[0]||'?';
+    hp.innerHTML=`<p>Next: connect <strong>${from}</strong> → <strong>${to}</strong> via <strong>"${via}"</strong></p>`;
+  }
+  hp.style.display='block';
+};
+
+document.getElementById('pathBtn').onclick=()=>{
+  G.showPath=!G.showPath;
+  const pp=document.getElementById('pathPanel');
+  if (!G.showPath) { pp.style.display='none'; return; }
+  const sp=G.sp;
+  if (!sp) { pp.innerHTML='<div class="panel-title">No path found.</div>'; pp.style.display='block'; return; }
+  let h=`<div class="panel-title">Shortest path · ${sp.length-2} hop${sp.length-2!==1?'s':''}</div>`;
+  for (let i=0;i<sp.length;i++) {
+    const isEnd=i===0||i===sp.length-1;
+    h+=`<div class="ps-row"><span class="ps-dot" style="background:${isEnd?'var(--gold)':'var(--green)'}"></span><span class="ps-name">${sp[i]}</span>`;
+    if (i<sp.length-1) {
+      const via=(graph.get(sp[i])?.get(sp[i+1])||[])[0]||'?';
+      h+=`<span class="ps-arr">→</span><span class="ps-via">via "${via}"</span>`;
+    }
+    h+='</div>';
+  }
+  pp.innerHTML=h; pp.style.display='block';
+};
+
+// ═══════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════
+function renderChain() {
+  const row=document.getElementById('chainRow');
+  row.innerHTML='';
+
+  function mkGroup(role, name, cls) {
+    const g=div('stn-group');
+    const c=div('stn-card '+cls);
+    c.innerHTML=`<div class="card-role">${role}</div><div class="card-name">${esc(name)}</div>`;
+    g.appendChild(c);
+    const d=div('stn-dot'); g.appendChild(d);
+    return g;
+  }
+
+  function mkConn(songTitle, style) {
+    // style: 'dim'|'lit'|'dash'
+    const rc=div('connector');
+    const l=div('c-line '+style); rc.appendChild(l);
+    if (songTitle) {
+      const sl=div('c-song'); sl.textContent=songTitle; sl.title=songTitle; rc.appendChild(sl);
+    }
+    return rc;
+  }
+
+  // START
+  row.appendChild(mkGroup('Start', G.start, 'start'));
+
+  if (G.won) {
+    // Full lit chain
+    for (let i=0;i<G.fullChain.length-1;i++) {
+      row.appendChild(mkConn(G.songLinks[i],'lit'));
+      if (i+1<G.fullChain.length-1) {
+        row.appendChild(mkGroup(`Stop ${i+1}`,G.fullChain[i+1],'stop'));
+      }
+    }
+    row.appendChild(mkConn(G.songLinks[G.songLinks.length-1],'lit'));
+    // END (won style)
+    const eg=div('stn-group');
+    const ec=div('stn-card target won');
+    ec.innerHTML=`<div class="card-role" style="color:var(--green)">Target ✓</div><div class="card-name">${esc(G.end)}</div>`;
+    eg.appendChild(ec);
+    const ed=div('stn-dot'); eg.appendChild(ed);
+    row.appendChild(eg);
+    return;
+  }
+
+  // Intermediate stops built so far
+  for (let i=0;i<G.fullChain.length-1;i++) {
+    row.appendChild(mkConn(G.songLinks[i],'lit'));
+    row.appendChild(mkGroup(`Stop ${i+1}`,G.fullChain[i+1],'stop'));
+  }
+
+  // Inline input zone
+  if (G.pendingSong) {
+    // Artist disambiguation picker card
+    row.appendChild(mkConn('','dim'));
+    const pg=div('stn-group');
+    const pc=div('pick-card');
+    pc.innerHTML=`<div class="pick-via">Who to add from</div>
+      <div class="pick-song">"${esc(G.pendingSong.title)}"</div>
+      <div class="pick-opts">${G.artistPicks.map(a=>`<button class="pick-opt">${esc(a)}</button>`).join('')}</div>
+      <button class="pick-cancel">← Choose different song</button>`;
+    pc.querySelectorAll('.pick-opt').forEach(b=>{
+      b.addEventListener('click',()=>commit(b.textContent,G.pendingSong.title));
+    });
+    pc.querySelector('.pick-cancel').addEventListener('click',cancelPick);
+    pg.appendChild(pc); row.appendChild(pg);
+
+  } else if (G.inputOpen) {
+    // Inline input card
+    row.appendChild(mkConn('','dim'));
+    const ig=div('stn-group'); ig.style.position='relative';
+    const ic=div('inp-card');
+
+    // Toggle artist/song
+    const tog=div('inp-toggle');
+    const aB=document.createElement('button'); aB.className='im'+(G.songMode?'':' on'); aB.textContent='Artist';
+    const sB=document.createElement('button'); sB.className='im'+(G.songMode?' on':''); sB.textContent='Song';
+    aB.addEventListener('click',()=>{ if(G.songMode){G.songMode=false;G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),30);}});
+    sB.addEventListener('click',()=>{ if(!G.songMode){G.songMode=true;G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),30);}});
+    tog.appendChild(aB); tog.appendChild(sB); ic.appendChild(tog);
+
+    const inp=document.createElement('input');
+    inp.type='text'; inp.className='inp-field'; inp.id='mainInp';
+    inp.placeholder=G.songMode?'Song name…':'Artist name…';
+    inp.value=G.inputVal; inp.autocomplete='off';
+
+    inp.addEventListener('input',()=>{
+      G.inputVal=inp.value;
+      G.dropMatches=G.songMode?songMatches(inp.value):artistMatches(inp.value);
+      refreshDrop(ic, G.dropMatches);
+    });
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){G.inputOpen=false;G.inputVal='';G.dropMatches=[];renderChain();}
+    });
+    ic.appendChild(inp);
+
+    // Restore dropdown if needed
+    if (G.dropMatches.length) refreshDrop(ic, G.dropMatches);
+
+    ig.appendChild(ic); row.appendChild(ig);
+
+  } else {
+    // Add-stop button
+    row.appendChild(mkConn('','dim'));
+    const aw=div('add-wrap');
+    const ab=document.createElement('button'); ab.className='add-btn'; ab.textContent='+';
+    ab.setAttribute('aria-label','Add a stop');
+    ab.addEventListener('click',openInput);
+    aw.appendChild(ab);
+    const al=div('add-label'); al.textContent='ADD STOP'; aw.appendChild(al);
+    row.appendChild(aw);
+  }
+
+  // Dashed connector + TARGET
+  row.appendChild(mkConn('','dash'));
+  row.appendChild(mkGroup('Target', G.end, 'target'));
+}
+
+function refreshDrop(card, matches) {
+  card.querySelectorAll('.inp-drop').forEach(d=>d.remove());
+  if (!matches.length) return;
+  const drop=div('inp-drop');
+  if (G.songMode) {
+    for (const song of matches) {
+      const last=lastInChain();
+      const item=div('drop-item');
+      item.innerHTML=`<div class="di-title">${esc(song.title)}</div>
+        <div class="di-sub">${song.artists.map(a=>a===last?`<em>${esc(a)}</em>`:`<span>${esc(a)}</span>`).join(' · ')}</div>`;
+      item.addEventListener('mousedown',e=>{e.preventDefault();G.dropMatches=[];G.inputVal='';pickSong(song);});
+      drop.appendChild(item);
+    }
+  } else {
+    for (const artist of matches) {
+      const last=lastInChain();
+      const sgs=graph.get(last)?.get(artist)||[];
+      const item=div('drop-item');
+      item.innerHTML=`<div class="di-title">${esc(artist)}</div>
+        <div class="di-sub">via ${sgs.slice(0,2).map(s=>`"${esc(s)}"`).join(', ')}</div>`;
+      item.addEventListener('mousedown',e=>{e.preventDefault();G.dropMatches=[];G.inputVal='';pickArtist(artist);});
+      drop.appendChild(item);
+    }
+  }
+  card.appendChild(drop);
+}
+
+// ═══════════════════════════════════════════
+//  DIFFICULTY + CHALLENGE BUTTONS
+// ═══════════════════════════════════════════
+document.querySelectorAll('[data-diff]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    G.diff=b.dataset.diff;
+    document.querySelectorAll('[data-diff]').forEach(x=>x.classList.toggle('active',x===b));
+    newGame();
+  });
+});
+
+document.getElementById('challengeBtn').addEventListener('click',()=>{
+  G.songMode=!G.songMode;
+  document.getElementById('challengeBtn').classList.toggle('active',G.songMode);
+  if (G.inputOpen) { G.inputVal=''; G.dropMatches=[]; renderChain(); setTimeout(()=>document.getElementById('mainInp')?.focus(),30); }
+});
+
+document.getElementById('newBtn').addEventListener('click',newGame);
+document.getElementById('winNew').addEventListener('click',newGame);
+document.getElementById('winCustom').addEventListener('click',openCustom);
+document.getElementById('customBtn').addEventListener('click',openCustom);
+
+// ═══════════════════════════════════════════
+//  CUSTOM GAME MODAL
+// ═══════════════════════════════════════════
+let cStart=null, cEnd=null;
+
+function openCustom() {
+  cStart=null; cEnd=null;
+  resetModalField('mStartInp','mStartDrop','mStartPill');
+  resetModalField('mEndInp','mEndDrop','mEndPill');
+  document.getElementById('mErr').textContent='';
+  document.getElementById('shareBox').classList.remove('show');
+  document.getElementById('customModal').style.display='flex';
+  document.getElementById('mStartInp').focus();
+}
+
+function closeCustom() {
+  document.getElementById('customModal').style.display='none';
+}
+
+function resetModalField(inpId, dropId, pillId) {
+  const inp=document.getElementById(inpId);
+  const drop=document.getElementById(dropId);
+  const pill=document.getElementById(pillId);
+  inp.value=''; inp.style.display='';
+  drop.style.display='none'; drop.innerHTML='';
+  pill.style.display='none';
+}
+
+function setupModalSearch(inpId, dropId, pillId, nameId, clearId, onPick) {
+  const inp=document.getElementById(inpId);
+  const drop=document.getElementById(dropId);
+  const pill=document.getElementById(pillId);
+  const nameEl=document.getElementById(nameId);
+  const clearEl=document.getElementById(clearId);
+
+  inp.addEventListener('input',()=>{
+    const q=inp.value.toLowerCase().trim();
+    drop.innerHTML='';
+    if (!q) { drop.style.display='none'; return; }
+    const hits=allArtists.filter(a=>a.toLowerCase().includes(q)).slice(0,12);
+    if (!hits.length) { drop.style.display='none'; return; }
+    hits.forEach(a=>{
+      const item=div('m-drop-item'); item.textContent=a;
+      item.addEventListener('mousedown',ev=>{
+        ev.preventDefault();
+        onPick(a);
+        inp.value=''; inp.style.display='none';
+        nameEl.textContent=a; pill.style.display='flex';
+        drop.style.display='none';
+        document.getElementById('mErr').textContent='';
+        document.getElementById('shareBox').classList.remove('show');
+      });
+      drop.appendChild(item);
+    });
+    drop.style.display='block';
+  });
+
+  inp.addEventListener('blur',()=>setTimeout(()=>drop.style.display='none',160));
+
+  clearEl.addEventListener('click',()=>{
+    onPick(null);
+    inp.style.display=''; pill.style.display='none';
+    drop.style.display='none';
+    document.getElementById('shareBox').classList.remove('show');
+    setTimeout(()=>inp.focus(),30);
+  });
+}
+
+setupModalSearch('mStartInp','mStartDrop','mStartPill','mStartName','mStartClear',a=>cStart=a);
+setupModalSearch('mEndInp','mEndDrop','mEndPill','mEndName','mEndClear',a=>cEnd=a);
+
+function buildShareURL(s, e) {
+  // Use current page URL, strip existing params, then append new ones
+  const base = location.href.split('?')[0].split('#')[0];
+  return base + '?start=' + encodeURIComponent(s) + '&end=' + encodeURIComponent(e);
+}
+
+function validateCustom() {
+  const err=document.getElementById('mErr');
+  if (!cStart||!cEnd) { err.textContent='Please select both artists.'; return false; }
+  if (cStart===cEnd) { err.textContent='Start and end must be different artists.'; return false; }
+  const path=bfs(cStart,cEnd);
+  if (!path) { err.textContent='These two artists aren\'t connected in the dataset.'; return false; }
+  err.textContent='';
+  return path;
+}
+
+document.getElementById('mLink').addEventListener('click',()=>{
+  const path=validateCustom(); if(!path) return;
+  const url=buildShareURL(cStart,cEnd);
+  document.getElementById('shareUrl').textContent=url;
+  document.getElementById('shareBox').classList.add('show');
+});
+
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  const url=document.getElementById('shareUrl').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    const b=document.getElementById('copyBtn');
+    b.textContent='Copied!'; b.classList.add('copied');
+    setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied');},2000);
+  }).catch(()=>{
+    // Fallback: select the text for manual copy
+    const el=document.getElementById('shareUrl');
+    const range=document.createRange(); range.selectNodeContents(el);
+    const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  });
+});
+
+document.getElementById('mPlay').addEventListener('click',()=>{
+  const path=validateCustom(); if(!path) return;
+  const url=buildShareURL(cStart,cEnd);
+  history.replaceState({},'',url);
+  closeCustom();
+  startGame(cStart,cEnd,path);
+});
+
+document.getElementById('mClose').addEventListener('click',closeCustom);
+document.getElementById('mCancel').addEventListener('click',closeCustom);
+document.getElementById('customModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('customModal')) closeCustom();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('customModal').style.display!=='none') closeCustom();
+});
+
+// ═══════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════
+function div(cls) { const e=document.createElement('div'); e.className=cls; return e; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ═══════════════════════════════════════════
+//  INIT — read URL params for custom game
+// ═══════════════════════════════════════════
+async function init() {
+  let data = EMBEDDED;
+  try {
+    const r = await fetch('data.json');
+    if (r.ok) data = await r.json();
+  } catch(_) {}
+
+  songs = data.songs || [];
+  buildGraph(songs);
+
+  // Read URL params — use decodeURIComponent carefully
+  const params = new URLSearchParams(location.search);
+  let startP = params.get('start');
+  let endP   = params.get('end');
+
+  // Decode if needed (some apps double-encode)
+  try { if(startP) startP=decodeURIComponent(startP); } catch(_){}
+  try { if(endP)   endP  =decodeURIComponent(endP);   } catch(_){}
+
+  if (startP && endP &&
+      allArtists.includes(startP) &&
+      allArtists.includes(endP) &&
+      startP !== endP) {
+    const path = bfs(startP, endP);
+    if (path) { startGame(startP, endP, path); return; }
+  }
+
+  newGame();
+}
+
 init();
 </script>
 </body>
