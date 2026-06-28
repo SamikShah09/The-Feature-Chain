@@ -1,1095 +1,1415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>The Feature Line</title>
 <style>
-:root{
-  --bg:#0b0b14;--surface:#111120;--s2:#181828;--s3:#202038;
-  --gold:#f0c640;--gold-dim:rgba(240,198,64,.25);--gold-glow:rgba(240,198,64,.6);
-  --blue:#3ec8f0;--blue-dim:rgba(62,200,240,.2);
-  --green:#3ef0aa;--green-dim:rgba(62,240,170,.2);--green-glow:rgba(62,240,170,.55);
-  --text:#dde0ef;--muted:#5a5a8a;--faint:#252542;
-  --err:#f06070;--border:rgba(255,255,255,.08);--r:12px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
-button{font-family:inherit;cursor:pointer;}
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #12121a;
+    --bg-3: #1a1a26;
+    --rail-off: #2a2a3a;
+    --rail-on: #22c55e;
+    --rail-glow: #4ade80;
+    --accent: #f59e0b;
+    --accent-2: #ec4899;
+    --text: #f5f5f7;
+    --text-dim: #9ca3af;
+    --border: #2a2a3a;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body { padding: 16px; max-width: 720px; margin: 0 auto; }
 
-/* ── TITLE — very top of page ── */
-.title-area{text-align:center;padding:28px 44px 12px;}
-.title-row{display:inline-flex;align-items:center;gap:14px;flex-wrap:nowrap;}
-.title-word{font-size:clamp(22px,4.2vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:-.015em;color:var(--text);white-space:nowrap;}
-.t-chain{display:flex;align-items:center;flex-shrink:0;}
-.t-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold-glow);flex-shrink:0;animation:tpulse 2.6s ease-in-out infinite;}
-.t-dot:nth-child(2){animation-delay:.45s;}.t-dot:nth-child(4){animation-delay:.9s;}
-.t-dot:nth-child(6){animation-delay:1.35s;}.t-dot:nth-child(8){animation-delay:1.8s;}
-.t-seg{width:14px;height:2px;background:var(--gold);opacity:.42;flex-shrink:0;}
-@keyframes tpulse{0%,100%{box-shadow:0 0 5px var(--gold-glow);}50%{box-shadow:0 0 14px rgba(240,198,64,.95),0 0 24px rgba(240,198,64,.32);}}
+  /* Header */
+  header {
+    text-align: center;
+    padding: 12px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  header h1 {
+    font-size: 28px;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+  }
+  header .tag {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .top-actions {
+    position: absolute;
+    top: 18px;
+    right: 0;
+    display: flex;
+    gap: 8px;
+  }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .icon-btn:hover { background: var(--rail-on); color: #000; }
 
-/* ── DESC + BUTTONS row, below title ── */
-.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:0 44px 16px;flex-wrap:wrap;}
-.desc{font-size:13.5px;line-height:1.65;color:var(--muted);max-width:480px;}
-.desc strong{color:var(--text);}
-.top-btns{display:flex;gap:10px;align-items:center;flex-shrink:0;}
+  /* Mode bar */
+  .mode-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .mode-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #000;
+    border-color: transparent;
+  }
 
-/* ── BUTTONS ── */
-.btn{padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--s2);color:var(--text);font-size:13px;font-weight:700;letter-spacing:.02em;transition:all .15s;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;}
-.btn:hover{background:var(--s3);border-color:rgba(255,255,255,.16);}
-.btn-gold{background:var(--gold);color:#0b0b14;border-color:var(--gold);}
-.btn-gold:hover{filter:brightness(1.08);background:var(--gold);}
-.btn-outline{border-color:rgba(255,255,255,.2);}
-.btn.active-path{border-color:var(--gold);color:var(--gold);}
-.btn-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
+  /* Stats strip */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .stat-item { text-align: center; }
+  .stat-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-lbl {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
 
-/* ── MODE BAR ── */
-.mode-bar{display:flex;align-items:center;gap:10px;padding:0 44px 10px;flex-wrap:wrap;}
-.mode-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);flex-shrink:0;}
-.mode-sep{width:1px;height:26px;background:var(--border);margin:0 4px;flex-shrink:0;}
-.pill{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:all .14s;}
-.pill:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
-.pill.active{background:var(--s2);border-color:rgba(255,255,255,.24);color:var(--text);}
-.challenge-pill{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;border:1.5px solid rgba(255,255,255,.14);background:transparent;color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;}
-.challenge-pill:hover{color:var(--text);border-color:rgba(255,255,255,.26);}
-.challenge-pill.active{border-color:var(--blue);color:var(--blue);background:rgba(62,200,240,.07);}
+  /* Puzzle header */
+  .puzzle-header {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .puzzle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .puzzle-row:last-child { margin-bottom: 0; }
+  .puzzle-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    min-width: 60px;
+  }
+  .puzzle-artist {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .artist-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+  .artist-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .puzzle-artist.start .artist-avatar { border-color: var(--accent); }
+  .puzzle-artist.target .artist-avatar { border-color: var(--accent-2); }
 
-/* ── STATS ── */
-.stats-bar{display:flex;align-items:center;gap:8px;padding:0 44px 20px;flex-wrap:wrap;}
-.stat{padding:6px 15px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--muted);font-family:monospace;}
-.stat strong{color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;}
+  /* Rail / Chain */
+  .rail-container {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    min-height: 120px;
+  }
+  .chain {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .chain-node {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--bg-3);
+    border-radius: 10px;
+    border-left: 3px solid var(--rail-off);
+    transition: all 0.4s;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .chain-node.lit {
+    border-left-color: var(--rail-on);
+    background: rgba(34, 197, 94, 0.08);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
+  }
+  .chain-node .node-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    color: var(--text-dim);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .chain-node.lit .node-avatar {
+    background: var(--rail-on);
+    color: #000;
+  }
+  .chain-node .node-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .chain-node .node-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chain-node .node-song {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .chain-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0;
+    color: var(--rail-off);
+    font-size: 18px;
+    transition: all 0.4s;
+  }
+  .chain-link.lit {
+    color: var(--rail-on);
+    text-shadow: 0 0 8px var(--rail-glow);
+  }
+  .chain-link .link-info {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-left: 8px;
+    font-style: italic;
+  }
+  .chain-link.lit .link-info { color: var(--rail-glow); }
 
-/* ── PANELS ── */
-.panel{margin:0 44px 12px;border-radius:var(--r);padding:13px 19px;border:1px solid var(--border);font-size:13px;display:none;}
-.panel-hint{border-color:rgba(240,198,64,.22);background:rgba(240,198,64,.04);}
-.panel-hint strong{color:var(--gold);}
-.panel-err{border-color:rgba(240,96,112,.22);background:rgba(240,96,112,.04);color:var(--err);}
+  /* Add button */
+  .add-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-3);
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .add-btn:hover { border-color: var(--rail-on); color: var(--rail-on); }
+  .add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── CHAIN AREA ── */
-.chain-area{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:8px 0 20px;min-height:280px;}
-.chain-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:44px 60px 52px;position:relative;}
-.chain-scroll::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:rgba(255,255,255,.08);transform:translateY(-50%);pointer-events:none;z-index:0;}
-.chain-row{display:flex;align-items:center;justify-content:center;min-width:max-content;position:relative;z-index:1;}
+  /* Search modal */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 40px;
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: none; border: none; color: var(--text-dim);
+    font-size: 24px; cursor: pointer; line-height: 1;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    margin-bottom: 10px;
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .search-tab {
+    flex: 1;
+    padding: 8px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .search-tab.active { background: var(--accent); color: #000; border-color: transparent; }
+  .search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .search-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--bg-3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .search-item:hover { background: var(--bg); transform: translateX(2px); }
+  .search-item .si-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #000;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .search-item .si-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .search-item .si-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .search-item .si-sub { font-size: 11px; color: var(--text-dim); }
 
-/* ── STATION GROUPS ── */
-.stn-group{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
-.stn-card{border-radius:var(--r);padding:18px 22px 16px;min-width:130px;max-width:168px;text-align:center;border:2px solid transparent;}
-.stn-card.start{border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 1px var(--gold-dim),0 8px 28px rgba(0,0,0,.4);}
-.stn-card.target{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 1px var(--blue-dim),0 8px 28px rgba(0,0,0,.4);}
-.stn-card.stop{border-color:var(--green);background:var(--surface);box-shadow:0 0 0 1px var(--green-dim);}
-.stn-card.target.won{border-color:var(--green);box-shadow:0 0 0 1px var(--green-dim),0 0 24px var(--green-glow);}
-/* Revealed path stop — dashed gold border so it's visually distinct from user-added stops */
-.stn-card.revealed{border-color:var(--gold);border-style:dashed;background:rgba(240,198,64,.04);box-shadow:none;animation:rcard .35s ease-out both;}
-@keyframes rcard{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
-.card-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:7px;}
-.stn-card.start .card-role{color:var(--gold);}
-.stn-card.target .card-role{color:var(--blue);}
-.stn-card.target.won .card-role{color:var(--green);}
-.stn-card.stop .card-role{color:var(--green);font-size:8px;}
-.stn-card.revealed .card-role{color:var(--gold);}
-.card-name{font-size:20px;font-weight:900;text-transform:uppercase;line-height:1.1;color:var(--text);letter-spacing:-.01em;word-break:break-word;}
-.stn-card.stop .card-name,.stn-card.revealed .card-name{font-size:14px;}
-.stn-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid transparent;margin-top:9px;}
-.stn-group:has(.start) .stn-dot{border-color:var(--gold);}
-.stn-group:has(.target:not(.won)) .stn-dot{border-color:var(--blue);}
-.stn-group:has(.target.won) .stn-dot,.stn-group:has(.stop) .stn-dot{background:var(--green);border-color:var(--green);}
-.stn-group:has(.revealed) .stn-dot{border-color:var(--gold);}
+  /* Win overlay */
+  .win-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(12px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .win-overlay.show { display: flex; }
+  .win-card {
+    background: linear-gradient(135deg, var(--bg-2), var(--bg-3));
+    border: 2px solid var(--rail-on);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.3);
+    animation: winPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes winPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .win-title {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--rail-on), var(--rail-glow));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .win-sub { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; }
+  .share-visual {
+    background: #000;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .share-chain {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .share-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .share-block {
+    width: 18px; height: 18px;
+    border-radius: 3px;
+    background: var(--rail-on);
+    flex-shrink: 0;
+  }
+  .share-block.empty { background: #333; }
+  .share-block.start { background: var(--accent); }
+  .share-block.end { background: var(--accent-2); }
+  .share-name { color: var(--text); font-weight: 600; }
+  .share-song { color: var(--text-dim); font-style: italic; font-size: 11px; margin-left: auto; }
+  .share-meta {
+    display: flex;
+    justify-content: space-around;
+    margin: 12px 0;
+    padding: 10px;
+    background: var(--bg);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .share-meta div { text-align: center; }
+  .share-meta .sm-val { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .share-meta .sm-lbl { color: var(--text-dim); font-size: 10px; text-transform: uppercase; }
+  .win-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .win-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .win-btn.primary { background: var(--rail-on); color: #000; }
+  .win-btn.secondary { background: var(--bg-3); color: var(--text); border: 1px solid var(--border); }
+  .win-btn:hover { transform: translateY(-1px); }
 
-/* ── CONNECTORS ── */
-.connector{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;}
-.c-line{height:3px;width:60px;transition:background .3s;}
-.c-line.dim{background:rgba(255,255,255,.11);}
-.c-line.lit{background:var(--green);box-shadow:0 0 8px var(--green-glow);}
-.c-line.dash{background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0,rgba(255,255,255,.18) 5px,transparent 5px,transparent 11px);}
-/* Revealed path rail — gold, fills in with animation */
-.c-line.revealed{background:var(--gold);box-shadow:0 0 10px var(--gold-glow);animation:rfill .4s cubic-bezier(.4,0,.2,1) both;transform-origin:left center;}
-@keyframes rfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.c-song{position:absolute;top:6px;font-size:9px;color:var(--muted);font-style:italic;white-space:nowrap;max-width:72px;overflow:hidden;text-overflow:ellipsis;}
-.c-song.gold{color:rgba(240,198,64,.7);}
+  /* Tutorial overlay */
+  .tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .tutorial-overlay.show { display: flex; }
+  .tutorial-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+  }
+  .tutorial-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .tutorial-step.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .tutorial-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  .tutorial-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+  .tutorial-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .tutorial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tutorial-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.2s;
+  }
+  .tutorial-dot.active { background: var(--accent); width: 20px; border-radius: 4px; }
+  .tutorial-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .tutorial-nav button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tutorial-nav .skip { background: transparent; color: var(--text-dim); }
+  .tutorial-nav .next { background: var(--accent); color: #000; }
 
-/* ── ADD STOP BUTTON ── */
-.add-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
-.add-btn{width:38px;height:38px;border-radius:50%;border:2px dashed rgba(255,255,255,.22);background:var(--bg);color:rgba(255,255,255,.28);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;}
-.add-btn:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 10px var(--gold-dim);}
-.add-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap;position:absolute;top:46px;}
+  /* Stats page */
+  .stats-page {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 150;
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .stats-page.show { display: block; }
+  .stats-page-inner { max-width: 600px; margin: 0 auto; }
+  .stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-header h2 { font-size: 22px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stats-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stats-card .sc-val {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stats-card .sc-lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .history-item {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .history-item .hi-artists { flex: 1; }
+  .history-item .hi-meta {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-align: right;
+  }
+  .history-item .hi-chain { color: var(--rail-on); font-weight: 700; }
 
-/* ── INLINE INPUT CARD ── */
-.inp-group{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
-.inp-card{border:2px dashed var(--gold);border-radius:var(--r);padding:13px 15px;width:220px;background:var(--surface);position:relative;}
-.inp-toggle{display:flex;gap:4px;margin-bottom:9px;}
-.im{flex:1;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:all .12s;}
-.im:hover{color:var(--text);}
-.im.on{background:var(--s2);color:var(--text);border-color:rgba(255,255,255,.22);}
-.inp-field{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:13px;outline:none;font-family:inherit;}
-.inp-field:focus{border-color:var(--gold);}
-.inp-field::placeholder{color:var(--muted);}
-.inp-drop{position:absolute;top:calc(100%+6px);left:-2px;right:-2px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);z-index:400;max-height:230px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,.6);}
-.drop-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s;}
-.drop-item:last-child{border-bottom:none;}
-.drop-item:hover{background:rgba(240,198,64,.1);}
-.di-title{font-size:13px;font-weight:700;color:var(--text);}
-.di-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.di-sub em{color:var(--gold);font-style:normal;font-weight:700;}
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--rail-on);
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 500;
+    transition: transform 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ── ARTIST PICKER ── */
-.pick-card{border:2px dashed var(--gold);border-radius:var(--r);padding:14px 16px;width:230px;background:var(--surface);text-align:center;}
-.pick-via{font-size:10px;color:var(--muted);margin-bottom:3px;}
-.pick-song{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:12px;}
-.pick-opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
-.pick-opt{padding:7px 13px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);font-size:12px;font-weight:600;transition:all .14s;}
-.pick-opt:hover{background:rgba(240,198,64,.13);border-color:var(--gold);color:var(--gold);}
-.pick-cancel{display:block;margin-top:10px;font-size:11px;color:var(--muted);background:none;border:none;font-family:inherit;}
-.pick-cancel:hover{color:var(--text);}
-
-/* ── WIN ── */
-.win-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:600;backdrop-filter:blur(6px);}
-.win-card{background:var(--surface);border:1px solid rgba(62,240,170,.28);border-radius:16px;padding:40px 48px;text-align:center;max-width:380px;}
-.win-card h2{font-size:30px;color:var(--green);margin-bottom:8px;}
-.win-card p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.5;}
-.win-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-
-/* ── CUSTOM MODAL ── */
-.m-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:800;padding:20px;backdrop-filter:blur(5px);}
-.modal{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:30px;max-width:450px;width:100%;position:relative;max-height:92vh;overflow-y:auto;}
-.m-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:22px;padding:4px 8px;line-height:1;}
-.m-close:hover{color:var(--text);}
-.modal h2{font-size:20px;margin-bottom:5px;}
-.m-sub{font-size:13px;color:var(--muted);margin-bottom:26px;}
-.m-group{margin-bottom:20px;}
-.m-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;}
-.m-wrap{position:relative;}
-.m-inp{width:100%;padding:11px 15px;background:var(--s2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;outline:none;font-family:inherit;}
-.m-inp:focus{border-color:var(--gold);}
-.m-inp::placeholder{color:var(--muted);}
-.m-drop{position:absolute;top:calc(100%+4px);left:0;right:0;background:var(--s2);border:1px solid var(--border);border-radius:8px;z-index:10;max-height:190px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.55);display:none;}
-.m-drop-item{padding:10px 15px;cursor:pointer;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.04);}
-.m-drop-item:last-child{border-bottom:none;}
-.m-drop-item:hover{background:rgba(240,198,64,.1);color:var(--gold);}
-.m-pill{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(240,198,64,.08);border:1px solid rgba(240,198,64,.3);border-radius:8px;font-size:14px;font-weight:700;color:var(--gold);display:none;}
-.m-pill button{background:none;border:none;color:var(--muted);font-size:18px;padding:0 0 0 10px;line-height:1;font-family:inherit;}
-.m-pill button:hover{color:var(--text);}
-.m-err{font-size:12px;color:var(--err);min-height:18px;margin:-10px 0 10px;}
-.share-box{margin-top:18px;display:none;}
-.share-box.show{display:block;}
-.share-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
-.share-row{display:flex;gap:8px;}
-.share-url{flex:1;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-family:monospace;overflow-wrap:anywhere;word-break:break-all;cursor:text;user-select:all;}
-.copy-btn{padding:9px 14px;background:var(--s2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;font-family:inherit;}
-.copy-btn:hover{background:var(--s3);}
-.copy-btn.copied{color:var(--green);border-color:rgba(62,240,170,.3);}
-.m-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap;}
-
-/* ── FOOTER ── */
-footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.05em;}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
-
-/* ── RESPONSIVE ── */
-@media(max-width:600px){
-  .title-area,.top-bar,.mode-bar,.stats-bar{padding-left:16px;padding-right:16px;}
-  .panel{margin-left:16px;margin-right:16px;}
-  .chain-scroll{padding:44px 20px 52px;}
-  .win-card{padding:28px 20px;}
-  .modal{padding:22px 18px;}
-}
+  /* Responsive */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    header h1 { font-size: 22px; }
+    .puzzle-artist { font-size: 15px; }
+    .artist-avatar { width: 34px; height: 34px; font-size: 14px; }
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    .mode-btn { font-size: 11px; padding: 8px 4px; }
+    .chain-node .node-name { font-size: 13px; }
+    .win-title { font-size: 26px; }
+    .share-song { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ① TITLE — very top of page -->
-<div class="title-area">
-  <div class="title-row">
-    <span class="title-word">The</span>
-    <div class="t-chain" aria-hidden="true">
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span>
-    </div>
-    <span class="title-word">Feature</span>
-    <div class="t-chain" aria-hidden="true">
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span><span class="t-seg"></span>
-      <span class="t-dot"></span>
-    </div>
-    <span class="title-word">Line</span>
+<header>
+  <h1>THE FEATURE LINE</h1>
+  <div class="tag">Connect • Chain • Share</div>
+  <div class="top-actions">
+    <button class="icon-btn" id="statsBtn" title="Stats">📊</button>
+    <button class="icon-btn" id="helpBtn" title="How to play">?</button>
   </div>
-</div>
+</header>
 
-<!-- ② DESCRIPTION + TOP BUTTONS — below title -->
-<div class="top-bar">
-  <p class="desc">Two artists. Build a connection between them, one shared song at a time.
-    Click <strong>+</strong> to add a stop — the rail lights up when a
-    <strong>feature connects</strong> them.</p>
-  <div class="top-btns">
-    <button class="btn btn-outline" id="hintBtn">Hint</button>
-    <button class="btn btn-outline" id="pathBtn"><span class="btn-dot"></span> Shortest path</button>
-    <button class="btn btn-outline" id="dailyShareBtn" style="display:none">📤 Share Daily</button>
-    <button class="btn btn-gold" id="newBtn">New matchup</button>
-  </div>
-</div>
-
-<!-- ③ MODE BAR -->
 <div class="mode-bar">
-  <span class="mode-label">Difficulty</span>
-  <button class="pill active" data-diff="easy">Easy</button>
-  <button class="pill" data-diff="hard">Hard</button>
-  <button class="pill" data-diff="full">Full Dataset</button>
-  <div class="mode-sep"></div>
-  <span class="mode-label">Challenge</span>
-  <button class="challenge-pill" id="challengeBtn">
-    <span>♫</span> Name the Song
-  </button>
-  <div class="mode-sep"></div>
-  <button class="challenge-pill" id="dailyBtn">
-    <span>📅</span> Daily
-    <span id="dailyStreakBadge" style="display:none;font-size:10px;background:rgba(62,200,240,.18);border-radius:10px;padding:1px 7px;margin-left:4px;color:var(--blue)">🔥<span id="dailyStreakNum">0</span></span>
-  </button>
+  <button class="mode-btn active" data-mode="daily">📅 Daily</button>
+  <button class="mode-btn" data-mode="easy">Easy</button>
+  <button class="mode-btn" data-mode="hard">Hard</button>
+  <button class="mode-btn" data-mode="custom">✦ Custom</button>
 </div>
 
-<!-- ④ STATS -->
-<div class="stats-bar">
-  <span class="stat">Dataset: <strong id="sSongs">—</strong> songs · <strong id="sArtists">—</strong> artists</span>
-  <span class="stat">Your chain: <strong id="sChain">0</strong> artists</span>
-  <span class="stat" id="shortestStat">Shortest known: <strong id="sShortest">?</strong> artists</span>
-  <span class="stat" id="timerStat">⏱ <strong id="sTimer">0:00</strong></span>
-  <span class="stat" id="dailyDateStat" style="display:none">📅 Daily: <strong id="sDailyDate">—</strong></span>
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-val" id="statStreak">0</div><div class="stat-lbl">Streak</div></div>
+  <div class="stat-item"><div class="stat-val" id="statWins">0</div><div class="stat-lbl">Wins</div></div>
+  <div class="stat-item"><div class="stat-val" id="statAvg">—</div><div class="stat-lbl">Avg Chain</div></div>
+  <div class="stat-item"><div class="stat-val" id="statBest">—</div><div class="stat-lbl">Best</div></div>
 </div>
 
-<!-- ⑤ COLLAPSIBLE PANELS -->
-<div class="panel panel-hint" id="hintPanel"></div>
-<div class="panel panel-err"  id="errPanel"></div>
-
-<!-- ⑥ CHAIN -->
-<div class="chain-area">
-  <div class="chain-scroll" id="chainScroll">
-    <div class="chain-row" id="chainRow"></div>
+<div class="puzzle-header">
+  <div class="puzzle-row">
+    <div class="puzzle-label">Start</div>
+    <div class="puzzle-artist start" id="startArtist">
+      <div class="artist-avatar">?</div>
+      <span>—</span>
+    </div>
+  </div>
+  <div class="puzzle-row">
+    <div class="puzzle-label">Target</div>
+    <div class="puzzle-artist target" id="targetArtist">
+      <div class="artist-avatar">?</div>
+      <span>—</span>
+    </div>
   </div>
 </div>
 
-<footer>
-  by Samik Shah &nbsp;·&nbsp;
-  <button class="btn btn-outline" style="font-size:11px;padding:5px 13px;" id="customBtn">✦ Custom Game</button>
-  &nbsp;·&nbsp;
-  <button class="btn btn-outline" style="font-size:11px;padding:5px 13px;" id="howBtn">? How to Play</button>
-</footer>
+<div class="rail-container">
+  <div class="chain" id="chain"></div>
+  <button class="add-btn" id="addBtn">＋ Add Next Artist</button>
+</div>
 
-<canvas id="confettiCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:900;display:none;"></canvas>
+<!-- Search Modal -->
+<div class="modal-bg" id="searchModal">
+  <div class="modal">
+    <h2>
+      <span id="searchTitle">Find Connection</span>
+      <button class="modal-close" id="searchClose">×</button>
+    </h2>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search artist or song..." autocomplete="off" />
+    <div class="search-tabs">
+      <button class="search-tab active" data-tab="artist">Artists</button>
+      <button class="search-tab" data-tab="song">Songs</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
 
-<!-- WIN OVERLAY -->
-<div class="win-overlay" id="winOverlay" style="display:none">
+<!-- Win Overlay -->
+<div class="win-overlay" id="winOverlay">
   <div class="win-card">
-    <h2>🎉 Line Complete!</h2>
-    <p id="winMsg"></p>
-    <div id="winTimerMsg" style="color:var(--muted);font-size:13px;margin:-8px 0 14px;"></div>
-    <div id="winDailyInfo" style="display:none;margin-bottom:16px;">
-      <p id="winStreakMsg" style="color:var(--blue);font-weight:700;font-size:15px;margin-bottom:8px;"></p>
-      <div id="winEmojiChain" style="font-size:20px;letter-spacing:4px;margin-bottom:12px;text-align:center;"></div>
-      <button class="btn btn-outline" id="winShareDaily" style="width:100%;justify-content:center;">📤 Share Daily Result</button>
+    <div class="win-title">🎉 LINE COMPLETE!</div>
+    <div class="win-sub" id="winSub">You connected the chain</div>
+    <div class="share-visual" id="shareVisual"></div>
+    <div class="share-meta">
+      <div><div class="sm-val" id="winChain">0</div><div class="sm-lbl">Chain</div></div>
+      <div><div class="sm-val" id="winTime">0:00</div><div class="sm-lbl">Time</div></div>
+      <div><div class="sm-val" id="winMoves">0</div><div class="sm-lbl">Moves</div></div>
     </div>
-    <div class="win-acts">
-      <button class="btn btn-gold" id="winNew">New matchup</button>
-      <button class="btn btn-outline" id="winCustom">Custom Game</button>
+    <div class="win-actions">
+      <button class="win-btn primary" id="copyShare">📤 Copy Result</button>
+      <button class="win-btn secondary" id="newMatchup">New Matchup</button>
     </div>
   </div>
 </div>
 
-<!-- HOW TO PLAY MODAL -->
-<div class="m-overlay" id="howModal" style="display:none">
-  <div class="modal">
-    <button class="m-close" id="howClose">✕</button>
-    <h2>How to Play</h2>
-    <p class="m-sub">Connect two artists through song features.</p>
-    <div style="font-size:14px;line-height:1.8;color:var(--text);">
-      <p style="margin-bottom:12px;">You're given a <strong style="color:var(--gold)">Start</strong> and a <strong style="color:var(--blue)">Target</strong> artist. Your job is to build a chain between them by finding artists they've both appeared on songs with.</p>
-      <div style="background:var(--s2);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:13px;">
-        <div style="color:var(--muted);margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;">Example</div>
-        <strong style="color:var(--gold)">Saba</strong>
-        <span style="color:var(--muted)"> → "Ultralight Beam" → </span>
-        <strong>Kanye West</strong>
-        <span style="color:var(--muted)"> → "Forever" → </span>
-        <strong>Drake</strong>
-        <span style="color:var(--muted)"> → "Chicago Freestyle" → </span>
-        <strong style="color:var(--blue)">Giveon</strong>
-      </div>
-      <ul style="padding-left:18px;color:var(--muted);margin-bottom:0;">
-        <li>Click <strong style="color:var(--text)">+</strong> to add an artist or song in the chain</li>
-        <li>Use <strong style="color:var(--text)">Artist</strong> or <strong style="color:var(--text)">Song</strong> mode to search</li>
-        <li>The rail lights up green when you connect two artists</li>
-        <li><strong style="color:var(--text)">Easy</strong> uses the top 250 most famous artists</li>
-        <li><strong style="color:var(--text)">Hard</strong> expands to the top 500</li>
-        <li><strong style="color:var(--text)">Daily</strong> gives everyone the same puzzle each day — no hints!</li>
-      </ul>
+<!-- Tutorial Overlay -->
+<div class="tutorial-overlay" id="tutorialOverlay">
+  <div class="tutorial-card">
+    <div class="tutorial-step active" data-step="0">
+      <div class="tutorial-icon">🎤</div>
+      <div class="tutorial-title">Welcome to The Feature Line</div>
+      <div class="tutorial-text">Connect two artists through their song collaborations. Build the shortest chain you can!</div>
     </div>
-    <div class="m-acts">
-      <button class="btn btn-gold" id="howPlay" style="width:100%;justify-content:center;">Let's Play!</button>
+    <div class="tutorial-step" data-step="1">
+      <div class="tutorial-icon">🔗</div>
+      <div class="tutorial-title">Build The Chain</div>
+      <div class="tutorial-text">You'll see a Start and Target artist. Tap <b>＋ Add Next Artist</b> to find an artist who has collaborated with your current one.</div>
     </div>
-  </div>
-</div>
-<div class="m-overlay" id="customModal" style="display:none">
-  <div class="modal">
-    <button class="m-close" id="mClose">✕</button>
-    <h2>Custom Game</h2>
-    <p class="m-sub">Pick two artists and share the link with anyone.</p>
-    <div class="m-group">
-      <label class="m-label">Start Artist</label>
-      <div class="m-wrap"><input class="m-inp" id="mSI" placeholder="Search artists…" autocomplete="off"><div class="m-drop" id="mSD"></div></div>
-      <div class="m-pill" id="mSP"><span id="mSN"></span><button id="mSC">×</button></div>
+    <div class="tutorial-step" data-step="2">
+      <div class="tutorial-icon">🎵</div>
+      <div class="tutorial-title">Find The Song</div>
+      <div class="tutorial-text">Each link needs a shared song. Search by artist or song name. The rail lights up green when you connect!</div>
     </div>
-    <div class="m-group">
-      <label class="m-label">End Artist</label>
-      <div class="m-wrap"><input class="m-inp" id="mEI" placeholder="Search artists…" autocomplete="off"><div class="m-drop" id="mED"></div></div>
-      <div class="m-pill" id="mEP"><span id="mEN"></span><button id="mEC">×</button></div>
+    <div class="tutorial-step" data-step="3">
+      <div class="tutorial-icon">🏆</div>
+      <div class="tutorial-title">Win & Share</div>
+      <div class="tutorial-text">Reach the Target artist to win. Share your chain as a visual card. Try Daily mode for the same puzzle as everyone!</div>
     </div>
-    <div class="m-err" id="mErr"></div>
-    <div class="share-box" id="shareBox">
-      <div class="share-lbl">Shareable Link</div>
-      <div class="share-row">
-        <div class="share-url" id="shareUrl"></div>
-        <button class="copy-btn" id="copyBtn">Copy</button>
-      </div>
+    <div class="tutorial-dots">
+      <div class="tutorial-dot active"></div>
+      <div class="tutorial-dot"></div>
+      <div class="tutorial-dot"></div>
+      <div class="tutorial-dot"></div>
     </div>
-    <div class="m-acts">
-      <button class="btn" id="mCancel">Cancel</button>
-      <button class="btn btn-outline" id="mLink">Get Link</button>
-      <button class="btn btn-gold" id="mPlay">Play</button>
+    <div class="tutorial-nav">
+      <button class="skip" id="tutSkip">Skip</button>
+      <button class="next" id="tutNext">Next →</button>
     </div>
   </div>
 </div>
+
+<!-- Stats Page -->
+<div class="stats-page" id="statsPage">
+  <div class="stats-page-inner">
+    <div class="stats-header">
+      <h2>📊 Your Stats</h2>
+      <button class="icon-btn" id="statsClose">×</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stats-card"><div class="sc-val" id="spWins">0</div><div class="sc-lbl">Total Wins</div></div>
+      <div class="stats-card"><div class="sc-val" id="spStreak">0</div><div class="sc-lbl">Current Streak</div></div>
+      <div class="stats-card"><div class="sc-val" id="spBestStreak">0</div><div class="sc-lbl">Best Streak</div></div>
+      <div class="stats-card"><div class="sc-val" id="spAvg">—</div><div class="sc-lbl">Avg Chain</div></div>
+      <div class="stats-card"><div class="sc-val" id="spBest">—</div><div class="sc-lbl">Best Chain</div></div>
+      <div class="stats-card"><div class="sc-val" id="spTime">—</div><div class="sc-lbl">Best Time</div></div>
+    </div>
+    <h3 style="margin-bottom:10px;font-size:14px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Recent History</h3>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
 
 <script>
-const EMBEDDED = __DATA__;
-let songs=[], allArtists=[], graph=new Map();
+const DATA = __DATA__;
 
+// ========== State ==========
+const state = {
+  mode: 'daily',
+  start: null,
+  target: null,
+  chain: [], // [{artist, song}]
+  startTime: null,
+  moves: 0,
+  searchTab: 'artist',
+  tutorialStep: 0,
+  won: false,
+};
+
+// ========== Indexed data ==========
+const artistSet = new Set();
+const songsByArtist = {}; // artist -> [{title, artists}]
+const allSongs = [];
+
+function buildIndex() {
+  DATA.songs.forEach(s => {
+    allSongs.push(s);
+    s.artists.forEach(a => {
+      artistSet.add(a);
+      if (!songsByArtist[a]) songsByArtist[a] = [];
+      songsByArtist[a].push(s);
+    });
+  });
+}
+buildIndex();
+
+const artistList = Array.from(artistSet);
+
+// ========== Tier filtering ==========
 const TIER_250 = new Set([
-  "Drake","Eminem","Kanye West","JAY\u201AZ","Lil Wayne","Kendrick Lamar","Snoop Dogg","Dr. Dre",
-  "J. Cole","2Pac","The Notorious B.I.G.","Nas","50 Cent","Travis Scott","Future","Nicki Minaj",
-  "Cardi B","Post Malone","Lil Baby","21 Savage","The Weeknd","Rihanna","Beyonc\xe9","Ariana Grande",
-  "Justin Bieber","Ed Sheeran","Dua Lipa","Billie Eilish","Taylor Swift","Bruno Mars","SZA",
-  "Juice WRLD","Young Thug","Gunna","Migos","Quavo","2 Chainz","Big Sean","A$AP Rocky",
-  "Chris Brown","Lil Uzi Vert","Doja Cat","Jack Harlow","Polo G","Lil Durk","DaBaby",
-  "Pop Smoke","Roddy Ricch","Kodak Black","Wiz Khalifa","Mac Miller","Chance the Rapper",
-  "Kid Cudi","Childish Gambino","Tyler, The Creator","Logic","G-Eazy","Meek Mill","Rick Ross",
-  "French Montana","DJ Khaled","Ty Dolla $ign","Swae Lee","Wale","ScHoolboy Q","Jh\xe9n\xe9 Aiko",
-  "Bryson Tiller","Summer Walker","Metro Boomin","Lil Tecca","Trippie Redd",
-  "YoungBoy Never Broke Again","Kevin Gates","Fetty Wap","Megan Thee Stallion","Bad Bunny",
-  "KAROL G","J Balvin","Daddy Yankee","Ozuna","T.I.","Ludacris","Busta Rhymes","Fat Joe",
-  "Jadakiss","Fabolous","The Game","Gucci Mane","Jeezy","Akon","Justin Timberlake",
-  "Lady Gaga","Alicia Keys","John Legend","Frank Ocean","Anderson .Paak","Pusha T",
-  "Playboi Carti","Lil Yachty","Offset","Dave East","Nipsey Hussle","YG","Yo Gotti",
-  "Trey Songz","Pharrell Williams","Swizz Beatz","Missy Elliott","DMX","Ice Cube",
-  "Andr\xe9 3000","Action Bronson","Joey Bada$$","Saba","Giveon","Tems","Lil Tjay","Rod Wave",
-  "Fivio Foreign","Wizkid","Burna Boy","Davido","Sexyy Red","GloRilla","Coi Leray",
-  "PnB Rock","NLE Choppa","PARTYNEXTDOOR","Jeremih","Don Toliver","Moneybagg Yo",
-  "24kGoldn","Khalid","H.E.R.","Benny the Butcher","Freddie Gibbs","Raekwon","Method Man",
-  "Redman","Bun B","Cam'ron","Lloyd Banks","LL Cool J","Timbaland","Ghostface Killah",
-  "Common","Talib Kweli","Jay Rock","Ab\u2010Soul","Isaiah Rashad","Jidenna","SiR","Miguel",
-  "6LACK","Brent Faiyaz","Lucky Daye","Ari Lennox","Baby Keem","Blxst","dvsn",
-  "Fredo Bang","Boosie Badazz","Lil' Kim","Eve","Ice-T","Big Pun","Diplo","Major Lazer",
-  "DJ Snake","Sean Paul","Popcaan","Vybz Kartel","Shenseea","6ix9ine","mgk",
-  "A Boogie Wit da Hoodie","Blueface","NF","Lil Skies","G Herbo","Stunna 4 Vegas",
-  "GloRilla","Sexyy Red","Coi Leray","Fivio Foreign","Morray","Giveon","Brent Faiyaz"
+ "Drake", "Eminem", "Kanye West", "JAY‐Z", "Lil Wayne", "Kendrick Lamar", "Snoop Dogg", "Dr. Dre",
+ "J. Cole", "2Pac", "The Notorious B.I.G.", "Nas", "50 Cent", "Travis Scott", "Future", "Nicki Minaj",
+ "Cardi B", "Post Malone", "Lil Baby", "21 Savage", "The Weeknd", "Rihanna", "Beyoncé", "Ariana Grande",
+ "Justin Bieber", "Ed Sheeran", "Dua Lipa", "Billie Eilish", "Taylor Swift", "Bruno Mars", "SZA",
+ "Juice WRLD", "Young Thug", "Gunna", "Migos", "Quavo", "2 Chainz", "Big Sean", "A$AP Rocky",
+ "Chris Brown", "Lil Uzi Vert", "Doja Cat", "Jack Harlow", "Polo G", "Lil Durk", "DaBaby",
+ "Pop Smoke", "Roddy Ricch", "Kodak Black", "Wiz Khalifa", "Mac Miller", "Chance the Rapper",
+ "Kid Cudi", "Childish Gambino", "Tyler, The Creator", "Logic", "G-Eazy", "Meek Mill", "Rick Ross",
+ "French Montana", "DJ Khaled", "Ty Dolla $ign", "Swae Lee", "Wale", "ScHoolboy Q", "Jhéné Aiko",
+ "Bryson Tiller", "Summer Walker", "Metro Boomin", "Lil Tecca", "Trippie Redd",
+ "YoungBoy Never Broke Again", "Kevin Gates", "Fetty Wap", "Megan Thee Stallion", "Bad Bunny",
+ "Karol G", "J Balvin", "Daddy Yankee", "Ozuna", "T.I.", "Ludacris", "Busta Rhymes", "Fat Joe",
+ "Jadakiss", "Fabolous", "The Game", "Gucci Mane", "Jeezy", "Akon", "Justin Timberlake",
+ "Lady Gaga", "Alicia Keys", "John Legend", "Frank Ocean", "Anderson .Paak", "Pusha T",
+ "Playboi Carti", "Lil Yachty", "Offset", "Dave East", "Nipsey Hussle", "YG", "Yo Gotti",
+ "Trey Songz", "Pharrell Williams", "Swizz Beatz", "Missy Elliott", "DMX", "Ice Cube",
+ "André 3000", "Action Bronson", "Joey Bada$$", "Saba", "Giveon", "Tems", "Lil Tjay", "Rod Wave",
+ "Fivio Foreign", "Wizkid", "Burna Boy", "Davido", "Sexyy Red", "GloRilla", "Coi Leray",
+ "PnB Rock", "NLE Choppa", "PARTYNEXTDOOR", "Jeremih", "Don Toliver", "Moneybagg Yo",
+ "24kGoldn", "Khalid", "H.E.R.", "Benny the Butcher", "Freddie Gibbs", "Raekwon", "Method Man",
+ "Redman", "Bun B", "Cam'ron", "Lloyd Banks", "LL Cool J", "Timbaland", "Ghostface Killah",
+ "Common", "Talib Kweli", "Jay Rock", "Ab‐Soul", "Isaiah Rashad", "Jidenna", "SiR", "Miguel",
+ "6LACK", "Brent Faiyaz", "Lucky Daye", "Ari Lennox", "Baby Keem", "Blxst", "dvsn",
+ "Fredo Bang", "Boosie Badazz", "Lil Kim", "Eve", "Ice T", "Big Pun", "Diplo", "Major Lazer",
+ "DJ Snake", "Sean Paul", "Popcaan", "Vybz Kartel", "Shenseea", "6ix9ine", "mgk",
+ "A Boogie wit da Hoodie", "Blueface", "NF", "Lil Skies", "G Herbo", "Stunna 4 Vegas",
+ "Morray"
 ]);
 
-const TIER_500 = new Set([
-  ...TIER_250,
-  "E\u201040","Too $hort","Birdman","Slim Thug","Paul Wall","Chamillionaire",
-  "Lil Flip","UGK","Pimp C","Three 6 Mafia","DJ Paul","Juicy J","Project Pat",
-  "Trae","Z-Ro","Scarface","Geto Boys","Master P","Juvenile","BG","Turk",
-  "Rich Homie Quan","Rae Sremmurd","iLoveMakonnen","Clipse","Westside Gunn",
-  "Conway the Machine","Flee Lord","Ransom","38 Spesh","Meyhem Lauren","Roc Marciano",
-  "billy woods","Elucid","Navy Blue","Wiki","Skyzoo","Smoke DZA","Vado","Papoose","Max B",
-  "Jay Critch","Ron Suno","Michael Christmas","Kemba","Open Mike Eagle","Oddisee","Locksmith",
-  "T-Pain","Ryan Leslie","Ne-Yo","Musiq Soulchild","Anthony Hamilton","Joe","Jaheim",
-  "Case","Mario","Ginuwine","Keith Sweat","Jodeci","Bobby Brown","Ralph Tresvant",
-  "Johnny Gill","Babyface","Teddy Riley","Aaron Hall","L.A. Reid","Jimmy Jam","Terry Lewis",
-  "H.E.R.","Snoh Aalegra","Lucky Daye","Victoria Mon\xe9t","Chloe Bailey",
-  "Halle Bailey","Normani","Kehlani","Kali Uchis","Bia","Flo Milli","City Girls","Latto",
-  "Asian Doll","Gloss Up","Blac Youngsta","42 Dugg","Rylo Rodriguez","Sleepy Hallow",
-  "Calboy","Comethazine","Smokepurpp","Ski Mask the Slump God","XXXTentacion",
-  "Craig Xen","Pouya","Night Lovell","Ghostemane","Bones","Ramirez","Chris Crack",
-  "Tech N9ne","Krizz Kaliko","Yelawolf","Machine Gun Kelly","Rittz","Futuristic",
-  "Chris Webby","Token","Classified","Madlib","J Dilla","Statik Selektah","DJ Premier",
-  "Pete Rock","Large Professor","Lord Finesse","Buckwild","DJ Drama","DJ Envy",
-  "Royce da 5\u20199\u2033","Joell Ortiz","KXNG Crooked","Slaughterhouse","38 Spesh",
-  "Mick Jenkins","Noname","Ravyn Lenae","Smino","Amin\xe9","theMIND","Eryn Allen Kane",
-  "Little Brother","Phonte","Black Thought","Mos Def","Queen Latifah","Lauryn Hill",
-  "Erykah Badu","D'Angelo","Missy Elliott","Eve","Lil' Kim","DMX","Ice Cube","Ice-T",
-  "Andr\xe9 3000","Big Pun","Cam'ron","Lloyd Banks","LL Cool J","Ghostface Killah"
-]);
-
-function buildGraph(list){
-  graph=new Map();
-  const aset=new Set();
-  for(const s of list){
-    for(const a of s.artists){
-      aset.add(a);
-      if(!graph.has(a)) graph.set(a,new Map());
-    }
-    for(let i=0;i<s.artists.length;i++)
-      for(let j=i+1;j<s.artists.length;j++){
-        const a=s.artists[i],b=s.artists[j];
-        if(!graph.get(a).has(b)) graph.get(a).set(b,[]);
-        if(!graph.get(b).has(a)) graph.get(b).set(a,[]);
-        graph.get(a).get(b).push(s.title);
-        graph.get(b).get(a).push(s.title);
-      }
+function getPool() {
+  if (state.mode === 'easy' || state.mode === 'daily') {
+    const pool = artistList.filter(a => TIER_250.has(a.trim()));
+    return pool.length > 10 ? pool : artistList;
   }
-  allArtists=[...aset].sort((a,b)=>a.localeCompare(b));
+  return artistList;
 }
 
-function bfs(start,end){
-  if(start===end) return [start];
-  const q=[[start,[start]]],vis=new Set([start]);
-  while(q.length){
-    const[cur,path]=q.shift();
-    for(const[nb] of (graph.get(cur)||new Map())){
-      if(nb===end) return [...path,nb];
-      if(!vis.has(nb)){vis.add(nb);q.push([nb,[...path,nb]]);}
+// ========== Seeded random ==========
+function seededRandom(seed) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h = Math.imul(h ^ seed.charCodeAt(i), 16777619);
+  }
+  return function() {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return ((h ^= h >>> 16) >>> 0) / 4294967296;
+  };
+}
+
+function todaySeed() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+// ========== Pathfinding (BFS) ==========
+function findShortestPath(start, target, pool) {
+  if (start === target) return [start];
+  const poolSet = new Set(pool);
+  const visited = new Set([start]);
+  const queue = [[start]];
+  let iter = 0;
+  while (queue.length && iter < 5000) {
+    iter++;
+    const path = queue.shift();
+    const curr = path[path.length - 1];
+    const songs = songsByArtist[curr] || [];
+    const neighbors = new Set();
+    for (const s of songs) {
+      for (const a of s.artists) {
+        if (poolSet.has(a) && !visited.has(a)) neighbors.add(a);
+      }
+    }
+    for (const n of neighbors) {
+      const newPath = [...path, n];
+      if (n === target) return newPath;
+      visited.add(n);
+      queue.push(newPath);
     }
   }
   return null;
 }
 
-let G={
-  start:null,end:null,
-  fullChain:[],
-  songLinks:[],
-  won:false,
-  sp:null,
-  pathRevealed:false,
-  diff:'easy',
-  daily:false,
-  songMode:false,
-  inputOpen:false,
-  pendingSong:null,
-  artistPicks:[],
-  inputVal:'',
-  dropMatches:[],
+// ========== Artist avatar (initials + gradient) ==========
+function artistInitials(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+function avatarHTML(name, cls = '') {
+  const initials = artistInitials(name);
+  // Use ui-avatars.com for reliable generated avatars
+  const url = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&bold=true&size=80`;
+  return `<img src="${url}" alt="${name}" onerror="this.style.display='none';this.parentNode.textContent='${initials}'" />`;
+}
+
+// ========== Sound (Web Audio API) ==========
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  return audioCtx;
+}
+
+function playTone(freq, duration, type = 'sine', vol = 0.15) {
+  const ctx = getAudio();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + duration);
+}
+
+function soundConnect() {
+  playTone(523.25, 0.12, 'triangle', 0.18);
+  setTimeout(() => playTone(659.25, 0.15, 'triangle', 0.15), 80);
+}
+
+function soundWin() {
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((f, i) => setTimeout(() => playTone(f, 0.25, 'triangle', 0.2), i * 100));
+}
+
+function soundError() {
+  playTone(200, 0.15, 'sawtooth', 0.1);
+}
+
+// ========== Stats (localStorage) ==========
+function loadStats() {
+  try {
+    return JSON.parse(localStorage.getItem('tfl_stats') || '{}');
+  } catch { return {}; }
+}
+function saveStats(s) {
+  localStorage.setItem('tfl_stats', JSON.stringify(s));
+}
+function recordWin(chain, time, mode) {
+  const s = loadStats();
+  s.wins = (s.wins || 0) + 1;
+  s.totalChain = (s.totalChain || 0) + chain.length;
+  s.games = (s.games || 0) + 1;
+  s.bestChain = Math.min(s.bestChain || 999, chain.length);
+  s.bestTime = Math.min(s.bestTime || 999999, time);
+  // Streak logic
+  const today = todaySeed();
+  if (s.lastWinDate !== today) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const yStr = `${yesterday.getFullYear()}-${yesterday.getMonth()}-${yesterday.getDate()}`;
+    s.streak = (s.lastWinDate === yStr) ? (s.streak || 0) + 1 : 1;
+    s.lastWinDate = today;
+  }
+  s.bestStreak = Math.max(s.bestStreak || 0, s.streak || 0);
+  // History
+  s.history = s.history || [];
+  s.history.unshift({
+    date: new Date().toISOString(),
+    start: state.start,
+    target: state.target,
+    chain: chain.map(c => c.artist),
+    length: chain.length,
+    time,
+    mode,
+  });
+  s.history = s.history.slice(0, 50);
+  saveStats(s);
+  updateStatsUI();
+}
+
+function updateStatsUI() {
+  const s = loadStats();
+  const wins = s.wins || 0;
+  const streak = s.streak || 0;
+  const avg = s.games ? (s.totalChain / s.games).toFixed(1) : '—';
+  const best = s.bestChain && s.bestChain < 999 ? s.bestChain : '—';
+  document.getElementById('statStreak').textContent = streak;
+  document.getElementById('statWins').textContent = wins;
+  document.getElementById('statAvg').textContent = avg;
+  document.getElementById('statBest').textContent = best;
+}
+
+// ========== Rendering ==========
+function renderArtist(el, name) {
+  el.innerHTML = `<div class="artist-avatar">${avatarHTML(name)}<span style="display:none">${artistInitials(name)}</span></div><span>${name}</span>`;
+}
+
+function renderChain() {
+  const chainEl = document.getElementById('chain');
+  chainEl.innerHTML = '';
+
+  // Start node (always lit)
+  const startNode = document.createElement('div');
+  startNode.className = 'chain-node lit';
+  startNode.innerHTML = `
+    <div class="node-avatar">${avatarHTML(state.start)}</div>
+    <div><div class="node-name">${state.start}</div><div class="node-song">START</div></div>
+  `;
+  chainEl.appendChild(startNode);
+
+  state.chain.forEach((link, i) => {
+    // Link connector
+    const linkEl = document.createElement('div');
+    linkEl.className = 'chain-link lit';
+    linkEl.innerHTML = `↓ <span class="link-info">♪ ${link.song}</span>`;
+    chainEl.appendChild(linkEl);
+
+    // Node
+    const node = document.createElement('div');
+    node.className = 'chain-node lit';
+    node.innerHTML = `
+      <div class="node-avatar">${avatarHTML(link.artist)}</div>
+      <div><div class="node-name">${link.artist}</div></div>
+    `;
+    chainEl.appendChild(node);
+  });
+
+  // Add button
+  const addBtn = document.getElementById('addBtn');
+  if (state.won) {
+    addBtn.style.display = 'none';
+  } else {
+    addBtn.style.display = 'block';
+    addBtn.disabled = false;
+    addBtn.textContent = '＋ Add Next Artist';
+  }
+}
+
+// ========== Puzzle generation ==========
+function pickPuzzle() {
+  const pool = getPool();
+  let start, target, path;
+  let attempts = 0;
+
+  if (state.mode === 'daily') {
+    const rand = seededRandom(todaySeed());
+    // Try to find a puzzle with path length 3-5
+    for (let i = 0; i < 30; i++) {
+      const si = Math.floor(rand() * pool.length);
+      const ti = Math.floor(rand() * pool.length);
+      if (si === ti) continue;
+      start = pool[si];
+      target = pool[ti];
+      path = findShortestPath(start, target, pool);
+      if (path && path.length >= 3 && path.length <= 5) break;
+    }
+  } else {
+    for (let i = 0; i < 30; i++) {
+      const si = Math.floor(Math.random() * pool.length);
+      const ti = Math.floor(Math.random() * pool.length);
+      if (si === ti) continue;
+      start = pool[si];
+      target = pool[ti];
+      path = findShortestPath(start, target, pool);
+      if (path && path.length >= 2 && path.length <= 6) break;
+    }
+  }
+
+  if (!path) {
+    // Fallback
+    start = pool[0];
+    target = pool[1];
+  }
+
+  state.start = start;
+  state.target = target;
+  state.chain = [];
+  state.moves = 0;
+  state.startTime = Date.now();
+  state.won = false;
+
+  renderArtist(document.getElementById('startArtist'), start);
+  renderArtist(document.getElementById('targetArtist'), target);
+  renderChain();
+}
+
+// ========== Game logic ==========
+function findConnection(fromArtist, toArtist) {
+  const fromSongs = songsByArtist[fromArtist] || [];
+  for (const s of fromSongs) {
+    if (s.artists.includes(toArtist)) return s.title;
+  }
+  return null;
+}
+
+function addLink(artist) {
+  if (state.won) return;
+  const lastArtist = state.chain.length ? state.chain[state.chain.length - 1].artist : state.start;
+  const song = findConnection(lastArtist, artist);
+  if (!song) {
+    soundError();
+    showToast(`No direct connection from ${lastArtist} to ${artist}`);
+    return;
+  }
+  state.chain.push({ artist, song });
+  state.moves++;
+  soundConnect();
+  renderChain();
+
+  if (artist === state.target) {
+    state.won = true;
+    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+    setTimeout(() => showWin(elapsed), 500);
+  }
+}
+
+// ========== Search ==========
+function openSearch() {
+  if (state.won) return;
+  document.getElementById('searchModal').classList.add('show');
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  input.focus();
+  renderSearchResults('');
+}
+function closeSearch() {
+  document.getElementById('searchModal').classList.remove('show');
+}
+
+function renderSearchResults(q) {
+  const results = document.getElementById('searchResults');
+  results.innerHTML = '';
+  const lastArtist = state.chain.length ? state.chain[state.chain.length - 1].artist : state.start;
+  const validArtists = new Set();
+  (songsByArtist[lastArtist] || []).forEach(s => s.artists.forEach(a => {
+    if (a !== lastArtist) validArtists.add(a);
+  }));
+
+  if (state.searchTab === 'artist') {
+    const ql = q.toLowerCase().trim();
+    let matches = Array.from(validArtists);
+    if (ql) matches = matches.filter(a => a.toLowerCase().includes(ql));
+    matches = matches.slice(0, 30);
+    if (!matches.length) {
+      results.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:13px;">No connected artists${ql ? ' matching "'+q+'"' : ''}</div>`;
+      return;
+    }
+    matches.forEach(a => {
+      const item = document.createElement('div');
+      item.className = 'search-item';
+      item.innerHTML = `
+        <div class="si-avatar">${avatarHTML(a)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="si-name">${a}</div>
+          <div class="si-sub">Connected via ${(songsByArtist[lastArtist]||[]).find(s=>s.artists.includes(a))?.title || ''}</div>
+        </div>
+      `;
+      item.onclick = () => {
+        closeSearch();
+        addLink(a);
+      };
+      results.appendChild(item);
+    });
+  } else {
+    // Song tab
+    const ql = q.toLowerCase().trim();
+    const songs = (songsByArtist[lastArtist] || []).filter(s => !ql || s.title.toLowerCase().includes(ql));
+    if (!songs.length) {
+      results.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:13px;">No songs found</div>`;
+      return;
+    }
+    songs.slice(0, 30).forEach(s => {
+      const others = s.artists.filter(a => a !== lastArtist);
+      others.forEach(a => {
+        const item = document.createElement('div');
+        item.className = 'search-item';
+        item.innerHTML = `
+          <div class="si-avatar">♪</div>
+          <div style="flex:1;min-width:0">
+            <div class="si-name">${s.title}</div>
+            <div class="si-sub">feat. ${a}</div>
+          </div>
+        `;
+        item.onclick = () => {
+          closeSearch();
+          addLink(a);
+        };
+        results.appendChild(item);
+      });
+    });
+  }
+}
+
+// ========== Win screen ==========
+function showWin(elapsed) {
+  soundWin();
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+  document.getElementById('winSub').textContent = `${state.start} → ${state.target}`;
+  document.getElementById('winChain').textContent = state.chain.length + 1;
+  document.getElementById('winTime').textContent = timeStr;
+  document.getElementById('winMoves').textContent = state.moves;
+
+  // Build share visual
+  const vis = document.getElementById('shareVisual');
+  vis.innerHTML = '';
+  const chainDiv = document.createElement('div');
+  chainDiv.className = 'share-chain';
+
+  // Start row
+  const startRow = document.createElement('div');
+  startRow.className = 'share-row';
+  startRow.innerHTML = `<div class="share-block start"></div><span class="share-name">${state.start}</span>`;
+  chainDiv.appendChild(startRow);
+
+  state.chain.forEach((link, i) => {
+    const row = document.createElement('div');
+    row.className = 'share-row';
+    row.innerHTML = `<div class="share-block"></div><span class="share-song">♪ ${link.song}</span>`;
+    chainDiv.appendChild(row);
+    const arow = document.createElement('div');
+    arow.className = 'share-row';
+    const isEnd = link.artist === state.target;
+    arow.innerHTML = `<div class="share-block ${isEnd ? 'end' : ''}"></div><span class="share-name">${link.artist}</span>`;
+    chainDiv.appendChild(arow);
+  });
+
+  vis.appendChild(chainDiv);
+  document.getElementById('winOverlay').classList.add('show');
+
+  recordWin([{artist: state.start}, ...state.chain], elapsed, state.mode);
+}
+
+function buildShareText() {
+  const mins = Math.floor((Date.now() - state.startTime) / 60000);
+  const lines = [`🎤 The Feature Line — ${state.mode.toUpperCase()}`];
+  lines.push(`${state.start}`);
+  state.chain.forEach(link => {
+    lines.push(`  ♪ ${link.song}`);
+    lines.push(`→ ${link.artist}`);
+  });
+  lines.push('');
+  lines.push(`Chain: ${state.chain.length + 1} | Moves: ${state.moves}`);
+  lines.push('Play: thefeatureline.app');
+  return lines.join('\n');
+}
+
+// ========== Tutorial ==========
+function showTutorial() {
+  state.tutorialStep = 0;
+  updateTutorial();
+  document.getElementById('tutorialOverlay').classList.add('show');
+}
+function updateTutorial() {
+  document.querySelectorAll('.tutorial-step').forEach(el => {
+    el.classList.toggle('active', +el.dataset.step === state.tutorialStep);
+  });
+  document.querySelectorAll('.tutorial-dot').forEach((el, i) => {
+    el.classList.toggle('active', i === state.tutorialStep);
+  });
+  const nextBtn = document.getElementById('tutNext');
+  nextBtn.textContent = state.tutorialStep === 3 ? "Let's Play! 🎵" : 'Next →';
+}
+function closeTutorial() {
+  document.getElementById('tutorialOverlay').classList.remove('show');
+  localStorage.setItem('tfl_tutorial_seen', '1');
+}
+
+// ========== Stats page ==========
+function openStats() {
+  const s = loadStats();
+  document.getElementById('spWins').textContent = s.wins || 0;
+  document.getElementById('spStreak').textContent = s.streak || 0;
+  document.getElementById('spBestStreak').textContent = s.bestStreak || 0;
+  document.getElementById('spAvg').textContent = s.games ? (s.totalChain / s.games).toFixed(1) : '—';
+  document.getElementById('spBest').textContent = (s.bestChain && s.bestChain < 999) ? s.bestChain : '—';
+  const bt = s.bestTime && s.bestTime < 999999 ? `${Math.floor(s.bestTime/60)}:${(s.bestTime%60).toString().padStart(2,'0')}` : '—';
+  document.getElementById('spTime').textContent = bt;
+
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  (s.history || []).slice(0, 10).forEach(h => {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    const d = new Date(h.date);
+    const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
+    item.innerHTML = `
+      <div class="hi-artists">${h.start} → ${h.target}</div>
+      <div class="hi-meta">
+        <div class="hi-chain">Chain ${h.length}</div>
+        <div>${dateStr} · ${h.mode}</div>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+  if (!(s.history || []).length) {
+    list.innerHTML = `<div style="text-align:center;color:var(--text-dim);padding:20px;font-size:13px;">No games yet. Start playing!</div>`;
+  }
+  document.getElementById('statsPage').classList.add('show');
+}
+
+// ========== Toast ==========
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ========== Event wiring ==========
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.mode = btn.dataset.mode;
+    if (state.mode === 'custom') {
+      promptCustom();
+    } else {
+      pickPuzzle();
+    }
+  };
+});
+
+function promptCustom() {
+  const start = prompt('Start artist:');
+  if (!start) { state.mode = 'daily'; document.querySelector('[data-mode="daily"]').click(); return; }
+  const target = prompt('Target artist:');
+  if (!target) { state.mode = 'daily'; document.querySelector('[data-mode="daily"]').click(); return; }
+  const s = start.trim(), t = target.trim();
+  if (!artistSet.has(s) || !artistSet.has(t)) {
+    alert('Artist not found in dataset. Try again.');
+    state.mode = 'daily'; document.querySelector('[data-mode="daily"]').click(); return;
+  }
+  state.start = s;
+  state.target = t;
+  state.chain = [];
+  state.moves = 0;
+  state.startTime = Date.now();
+  state.won = false;
+  renderArtist(document.getElementById('startArtist'), s);
+  renderArtist(document.getElementById('targetArtist'), t);
+  renderChain();
+}
+
+document.getElementById('addBtn').onclick = openSearch;
+document.getElementById('searchClose').onclick = closeSearch;
+document.getElementById('searchInput').oninput = e => renderSearchResults(e.target.value);
+document.querySelectorAll('.search-tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.searchTab = tab.dataset.tab;
+    renderSearchResults(document.getElementById('searchInput').value);
+  };
+});
+document.getElementById('searchModal').onclick = e => {
+  if (e.target.id === 'searchModal') closeSearch();
 };
 
-let timerInterval=null, timerSecs=0, timerFinalSecs=0;
+document.getElementById('copyShare').onclick = () => {
+  const text = buildShareText();
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!')).catch(() => showToast('Copy failed'));
+};
+document.getElementById('newMatchup').onclick = () => {
+  document.getElementById('winOverlay').classList.remove('show');
+  pickPuzzle();
+};
 
-function startTimer(){
-  clearInterval(timerInterval);
-  timerSecs=0;
-  set('sTimer','0:00');
-  timerInterval=setInterval(()=>{
-    timerSecs++;
-    const m=Math.floor(timerSecs/60), s=timerSecs%60;
-    set('sTimer',m+':'+(s<10?'0':'')+s);
-  },1000);
-}
-function stopTimer(){
-  clearInterval(timerInterval);
-  timerFinalSecs=timerSecs;
-}
-function fmtTime(secs){
-  const m=Math.floor(secs/60),s=secs%60;
-  return m+':'+(s<10?'0':'')+s;
-}
+document.getElementById('helpBtn').onclick = showTutorial;
+document.getElementById('tutNext').onclick = () => {
+  if (state.tutorialStep === 3) closeTutorial();
+  else { state.tutorialStep++; updateTutorial(); }
+};
+document.getElementById('tutSkip').onclick = closeTutorial;
 
-function diffPool(){
-  if(G.diff==='easy'){
-    const p=allArtists.filter(a=>TIER_250.has(a)&&graph.has(a));
-    return p.length>=4?p:allArtists;
-  }
-  if(G.diff==='hard'){
-    const p=allArtists.filter(a=>TIER_500.has(a)&&graph.has(a));
-    return p.length>=4?p:allArtists;
-  }
-  return allArtists;
-}
+document.getElementById('statsBtn').onclick = openStats;
+document.getElementById('statsClose').onclick = () => {
+  document.getElementById('statsPage').classList.remove('show');
+};
 
-function rand(pool,exc=[]){
-  const p=pool.filter(a=>!exc.includes(a));
-  return p[Math.floor(Math.random()*p.length)];
+// ========== Init ==========
+updateStatsUI();
+pickPuzzle();
+if (!localStorage.getItem('tfl_tutorial_seen')) {
+  setTimeout(showTutorial, 500);
 }
-function diffOK(hops){
-  if(G.diff==='easy') return hops>=1&&hops<=2;
-  if(G.diff==='hard') return hops>=3;
-  return hops>=1;
-}
-function newGame(){
-  G.daily=false;
-  setDailyUI(false);
-  const pool=diffPool();
-  let s,e,path,tries=0;
-  do{s=rand(pool);e=rand(pool,[s]);path=bfs(s,e);tries++;}
-  while((!path||!diffOK(path.length-2))&&tries<600);
-  if(!path||!diffOK(path.length-2)){
-    tries=0;
-    do{s=rand(allArtists);e=rand(allArtists,[s]);path=bfs(s,e);tries++;}
-    while((!path||path.length<2)&&tries<200);
-  }
-  startGame(s,e,path);
-}
-function startGame(s,e,knownPath){
-  G={...G,start:s,end:e,
-    fullChain:[s],songLinks:[],
-    won:false,sp:knownPath||bfs(s,e),
-    pathRevealed:false,
-    inputOpen:false,pendingSong:null,artistPicks:[],
-    inputVal:'',dropMatches:[]};
-  hide('winOverlay');hide('hintPanel');hide('errPanel');
-  startTimer();
-  updateStats();renderChain();
-  document.getElementById('pathBtn').classList.remove('active-path');
-}
-function updateStats(){
-  set('sSongs',songs.length);
-  set('sArtists',allArtists.length);
-  const inter=G.won?G.fullChain.length-2:G.fullChain.length-1;
-  set('sChain',Math.max(0,inter));
-  if(!G.daily) set('sShortest',G.sp?Math.max(0,G.sp.length-2):'?');
-}
-function lastIn(){return G.fullChain[G.fullChain.length-1];}
-
-function eligible(song){
-  const last=lastIn();
-  return song.artists.filter(a=>{
-    if(a===last) return false;
-    if(a===G.end) return true;
-    return !G.fullChain.includes(a);
-  });
-}
-function songMatches(q){
-  if(!q.trim()) return [];
-  const last=lastIn(),ql=q.toLowerCase();
-  return songs.filter(s=>s.artists.includes(last)&&eligible(s).length>0&&s.title.toLowerCase().includes(ql)).slice(0,10);
-}
-function artistMatches(q){
-  if(!q.trim()) return [];
-  const last=lastIn(),ql=q.toLowerCase();
-  const nb=graph.get(last)||new Map();
-  return[...nb.keys()].filter(a=>{
-    if(a===G.end?false:G.fullChain.includes(a)) return false;
-    return a.toLowerCase().includes(ql);
-  }).sort().slice(0,10);
-}
-function pickSong(song){
-  const picks=eligible(song);
-  if(!picks.length){showErr('No new artists available from this song.');return;}
-  if(picks.length===1) commit(picks[0],song.title);
-  else{G.pendingSong=song;G.artistPicks=picks;G.inputVal='';G.dropMatches=[];renderChain();}
-}
-function pickArtist(artist){
-  const sgs=graph.get(lastIn())?.get(artist)||[];
-  if(!sgs.length){showErr("These artists don't share a song in the dataset.");return;}
-  commit(artist,sgs[0]);
-}
-function commit(artist,songTitle){
-  G.fullChain.push(artist);
-  G.songLinks.push(songTitle);
-  G.pendingSong=null;G.artistPicks=[];
-  G.inputVal='';G.dropMatches=[];
-  G.inputOpen=false;
-  G.pathRevealed=false;
-  if(artist===G.end){
-    G.won=true;
-    stopTimer();
-    if(G.daily) onDailyWin();
-    updateStats();renderChain();
-    launchConfetti();
-    setTimeout(()=>{
-      const hops=G.fullChain.length-2,sp=G.sp?G.sp.length-2:'?';
-      set('winTimerMsg',`Solved in ${fmtTime(timerFinalSecs)}`);
-      if(G.daily){
-        set('winMsg',`Connected in ${hops} artist${hops!==1?'s':''}!`);
-        document.getElementById('winDailyInfo').style.display='block';
-        document.getElementById('winStreakMsg').textContent=getStreakMsg();
-        document.getElementById('winEmojiChain').textContent=buildEmojiChain();
-      } else {
-        set('winMsg',`Connected in ${hops} hop${hops!==1?'s':''} \u2014 shortest possible: ${sp}.`);
-        document.getElementById('winDailyInfo').style.display='none';
-      }
-      show('winOverlay');
-    },350);
-  } else {updateStats();renderChain();}
-}
-function cancelPick(){G.pendingSong=null;G.artistPicks=[];G.inputOpen=false;renderChain();}
-function openInput(){G.inputOpen=true;G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),40);}
-function showErr(msg){
-  const p=document.getElementById('errPanel');
-  p.textContent=msg;p.style.display='block';
-  clearTimeout(showErr._t);showErr._t=setTimeout(()=>p.style.display='none',3500);
-}
-
-function buildEmojiChain(){
-  const optimal=G.sp?G.sp.length-2:null;
-  const actual=G.fullChain.length-2;
-  let out='';
-  for(let i=0;i<G.fullChain.length-1;i++) out+='\uD83C\uDFB5';
-  if(optimal!==null) out+=' '+(actual===optimal?'\u2b50':actual<=optimal+1?'\uD83D\uDFE1':'\u26AA');
-  return out;
-}
-
-document.getElementById('pathBtn').addEventListener('click',()=>{
-  if(G.daily) return;
-  if(!G.sp){showErr('No path found between these artists.');return;}
-  G.pathRevealed=!G.pathRevealed;
-  document.getElementById('pathBtn').classList.toggle('active-path',G.pathRevealed);
-  renderChain();
-});
-
-document.getElementById('hintBtn').addEventListener('click',()=>{
-  if(G.daily){showErr('No hints in Daily mode \u2014 figure it out!');return;}
-  const hp=document.getElementById('hintPanel');
-  const sp=G.sp;
-  if(!sp||sp.length<2){hp.innerHTML='<p>No hint available.</p>';hp.style.display='block';return;}
-  const cur=G.fullChain.length;
-  if(cur>=sp.length){
-    hp.innerHTML='<p>You\'ve already matched the optimal path!</p>';
-  } else {
-    const from=sp[cur-1],to=sp[cur];
-    const via=(graph.get(from)?.get(to)||[])[0]||'?';
-    hp.innerHTML=`<p>Next: connect <strong>${esc(from)}</strong> \u2192 <strong>${esc(to)}</strong> via <strong>"${esc(via)}"</strong></p>`;
-  }
-  hp.style.display='block';
-});
-
-function renderChain(){
-  const row=document.getElementById('chainRow');
-  row.innerHTML='';
-
-  function mkGroup(role,name,cls){
-    const g=divEl('stn-group');
-    const c=divEl('stn-card '+cls);
-    c.innerHTML=`<div class="card-role">${role}</div><div class="card-name">${esc(name)}</div>`;
-    g.appendChild(c);
-    g.appendChild(divEl('stn-dot'));
-    return g;
-  }
-  function mkConn(songTitle,style,delay){
-    const rc=divEl('connector');
-    const l=divEl('c-line '+style);
-    if(delay) l.style.animationDelay=delay;
-    rc.appendChild(l);
-    if(songTitle){
-      const sl=divEl('c-song'+(style==='revealed'?' gold':''));
-      sl.textContent=songTitle;sl.title=songTitle;
-      rc.appendChild(sl);
-    }
-    return rc;
-  }
-
-  if(G.pathRevealed&&G.sp&&!G.daily){
-    const path=G.sp;
-    row.appendChild(mkGroup('Start',G.start,'start'));
-    let delay=0;
-    for(let i=0;i<path.length-1;i++){
-      const via=(graph.get(path[i])?.get(path[i+1])||[])[0]||'?';
-      const conn=mkConn(via,'revealed',`${delay}s`);
-      delay+=0.12;
-      row.appendChild(conn);
-      if(i+1===path.length-1){
-        row.appendChild(mkGroup('Target',G.end,'target'));
-      } else {
-        const sg=mkGroup('Shortest path',path[i+1],'revealed');
-        sg.querySelector('.stn-card').style.animationDelay=`${delay}s`;
-        delay+=0.08;
-        row.appendChild(sg);
-      }
-    }
-    return;
-  }
-
-  row.appendChild(mkGroup('Start',G.start,'start'));
-
-  if(G.won){
-    for(let i=0;i<G.fullChain.length-1;i++){
-      row.appendChild(mkConn(G.songLinks[i],'lit'));
-      if(i+1<G.fullChain.length-1)
-        row.appendChild(mkGroup(`Stop ${i+1}`,G.fullChain[i+1],'stop'));
-    }
-    row.appendChild(mkConn(G.songLinks[G.songLinks.length-1],'lit'));
-    const eg=divEl('stn-group');
-    const ec=divEl('stn-card target won');
-    ec.innerHTML=`<div class="card-role" style="color:var(--green)">Target \u2713</div><div class="card-name">${esc(G.end)}</div>`;
-    eg.appendChild(ec);eg.appendChild(divEl('stn-dot'));
-    row.appendChild(eg);
-    return;
-  }
-
-  for(let i=0;i<G.fullChain.length-1;i++){
-    row.appendChild(mkConn(G.songLinks[i],'lit'));
-    row.appendChild(mkGroup(`Stop ${i+1}`,G.fullChain[i+1],'stop'));
-  }
-
-  if(G.pendingSong){
-    row.appendChild(mkConn('','dim'));
-    const pg=divEl('stn-group');
-    const pc=divEl('pick-card');
-    pc.innerHTML=`<div class="pick-via">Who to add from</div>
-      <div class="pick-song">"${esc(G.pendingSong.title)}"</div>
-      <div class="pick-opts">${G.artistPicks.map(a=>`<button class="pick-opt">${esc(a)}</button>`).join('')}</div>
-      <button class="pick-cancel">\u2190 Choose different song</button>`;
-    pc.querySelectorAll('.pick-opt').forEach(b=>b.addEventListener('click',()=>commit(b.textContent,G.pendingSong.title)));
-    pc.querySelector('.pick-cancel').addEventListener('click',cancelPick);
-    pg.appendChild(pc);row.appendChild(pg);
-
-  } else if(G.inputOpen){
-    row.appendChild(mkConn('','dim'));
-    const ig=divEl('stn-group');
-    const ic=divEl('inp-card');
-
-    const tog=divEl('inp-toggle');
-    const aB=document.createElement('button');aB.className='im'+(G.songMode?'':' on');aB.textContent='Artist';
-    const sB=document.createElement('button');sB.className='im'+(G.songMode?' on':'');sB.textContent='Song';
-    aB.addEventListener('click',()=>{if(G.songMode){G.songMode=false;G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),30);}});
-    sB.addEventListener('click',()=>{if(!G.songMode){G.songMode=true;G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),30);}});
-    tog.appendChild(aB);tog.appendChild(sB);ic.appendChild(tog);
-
-    const inp=document.createElement('input');
-    inp.type='text';inp.className='inp-field';inp.id='mainInp';
-    inp.placeholder=G.songMode?'Song name\u2026':'Artist name\u2026';
-    inp.value=G.inputVal;inp.autocomplete='off';
-    inp.addEventListener('input',()=>{
-      G.inputVal=inp.value;
-      G.dropMatches=G.songMode?songMatches(inp.value):artistMatches(inp.value);
-      refreshDrop(ic,G.dropMatches);
-    });
-    inp.addEventListener('keydown',e=>{
-      if(e.key==='Escape'){G.inputOpen=false;G.inputVal='';G.dropMatches=[];renderChain();}
-    });
-    ic.appendChild(inp);
-    if(G.dropMatches.length) refreshDrop(ic,G.dropMatches);
-    ig.appendChild(ic);row.appendChild(ig);
-
-  } else {
-    row.appendChild(mkConn('','dim'));
-    const aw=divEl('add-wrap');
-    const ab=document.createElement('button');ab.className='add-btn';ab.textContent='+';
-    ab.setAttribute('aria-label','Add a stop');
-    ab.addEventListener('click',openInput);
-    aw.appendChild(ab);
-    const al=divEl('add-label');al.textContent='ADD STOP';aw.appendChild(al);
-    row.appendChild(aw);
-  }
-
-  row.appendChild(mkConn('','dash'));
-  row.appendChild(mkGroup('Target',G.end,'target'));
-}
-
-function refreshDrop(card,matches){
-  card.querySelectorAll('.inp-drop').forEach(d=>d.remove());
-  if(!matches.length) return;
-  const drop=divEl('inp-drop');
-  if(G.songMode){
-    for(const song of matches){
-      const last=lastIn(),item=divEl('drop-item');
-      item.innerHTML=`<div class="di-title">${esc(song.title)}</div>
-        <div class="di-sub">${song.artists.map(a=>a===last?`<em>${esc(a)}</em>`:`<span>${esc(a)}</span>`).join(' \u00b7 ')}</div>`;
-      item.addEventListener('mousedown',e=>{e.preventDefault();G.dropMatches=[];G.inputVal='';pickSong(song);});
-      drop.appendChild(item);
-    }
-  } else {
-    for(const artist of matches){
-      const last=lastIn(),sgs=graph.get(last)?.get(artist)||[],item=divEl('drop-item');
-      item.innerHTML=`<div class="di-title">${esc(artist)}</div>
-        <div class="di-sub">via ${sgs.slice(0,2).map(s=>`"${esc(s)}"`).join(', ')}</div>`;
-      item.addEventListener('mousedown',e=>{e.preventDefault();G.dropMatches=[];G.inputVal='';pickArtist(artist);});
-      drop.appendChild(item);
-    }
-  }
-  card.appendChild(drop);
-}
-
-document.querySelectorAll('[data-diff]').forEach(b=>b.addEventListener('click',()=>{
-  G.diff=b.dataset.diff;
-  document.querySelectorAll('[data-diff]').forEach(x=>x.classList.toggle('active',x===b));
-  document.getElementById('dailyBtn').classList.remove('active');
-  newGame();
-}));
-document.getElementById('challengeBtn').addEventListener('click',()=>{
-  G.songMode=!G.songMode;
-  document.getElementById('challengeBtn').classList.toggle('active',G.songMode);
-  if(G.inputOpen){G.inputVal='';G.dropMatches=[];renderChain();setTimeout(()=>document.getElementById('mainInp')?.focus(),30);}
-});
-document.getElementById('newBtn').addEventListener('click',newGame);
-document.getElementById('winNew').addEventListener('click',newGame);
-document.getElementById('winCustom').addEventListener('click',openCustom);
-document.getElementById('customBtn').addEventListener('click',openCustom);
-
-function setDailyUI(on){
-  document.getElementById('pathBtn').style.display=on?'none':'';
-  document.getElementById('dailyShareBtn').style.display=on?'':'none';
-  document.getElementById('shortestStat').style.display=on?'none':'';
-  document.getElementById('dailyDateStat').style.display=on?'':'none';
-  if(on){
-    const d=new Date(),str=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    set('sDailyDate',str);
-  }
-}
-
-function mulberry32(seed){
-  return function(){
-    seed|=0;seed=seed+0x6D2B79F5|0;
-    let t=Math.imul(seed^seed>>>15,1|seed);
-    t=t+Math.imul(t^t>>>7,61|t)^t;
-    return((t^t>>>14)>>>0)/4294967296;
-  };
-}
-function todayStr(){
-  const d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-function dateToSeed(s){
-  let h=0;
-  for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
-  return h>>>0;
-}
-
-function loadStreak(){
-  try{return JSON.parse(localStorage.getItem('tfl_streak')||'null')||{lastDate:'',streak:0};}
-  catch(_){return{lastDate:'',streak:0};}
-}
-function saveStreak(data){
-  try{localStorage.setItem('tfl_streak',JSON.stringify(data));}catch(_){}
-}
-function onDailyWin(){
-  const today=todayStr();
-  let s=loadStreak();
-  if(s.lastDate===today) return;
-  const prev=new Date();prev.setDate(prev.getDate()-1);
-  const yest=prev.getFullYear()+'-'+String(prev.getMonth()+1).padStart(2,'0')+'-'+String(prev.getDate()).padStart(2,'0');
-  s.streak=(s.lastDate===yest)?s.streak+1:1;
-  s.lastDate=today;
-  saveStreak(s);
-  refreshStreakBadge(s);
-}
-function getStreakMsg(){
-  const s=loadStreak();
-  if(s.streak<=1) return '\uD83C\uDF89 Daily complete!';
-  return `\uD83D\uDD25 ${s.streak}-day streak!`;
-}
-function refreshStreakBadge(s){
-  const badge=document.getElementById('dailyStreakBadge');
-  if(!s||s.streak<2){badge.style.display='none';return;}
-  badge.style.display='';
-  set('dailyStreakNum',s.streak);
-}
-
-function getDailyPair(){
-  const today=todayStr();
-  const rng=mulberry32(dateToSeed(today));
-  const pool=allArtists.filter(a=>(TIER_500.has(a)||TIER_250.has(a))&&graph.has(a));
-  const usable=pool.length>=10?pool:allArtists;
-  let s,e,path;
-  for(let i=0;i<400;i++){
-    s=usable[Math.floor(rng()*usable.length)];
-    e=usable[Math.floor(rng()*usable.length)];
-    if(s===e) continue;
-    path=bfs(s,e);
-    if(path&&path.length>=3&&path.length<=7) break;
-  }
-  return {s,e,path};
-}
-function startDailyGame(){
-  G.daily=true;
-  setDailyUI(true);
-  document.getElementById('dailyBtn').classList.add('active');
-  document.querySelectorAll('[data-diff]').forEach(x=>x.classList.remove('active'));
-  refreshStreakBadge(loadStreak());
-  const{s,e,path}=getDailyPair();
-  if(!s||!e){showErr('Could not generate daily puzzle. Try again.');return;}
-  startGame(s,e,path);
-}
-function dailyShareText(){
-  const today=todayStr();
-  const hops=G.won?G.fullChain.length-2:'?';
-  const streak=loadStreak().streak;
-  const emoji=buildEmojiChain();
-  const url=location.href.split('?')[0]+'?daily';
-  return `The Feature Line \uD83C\uDFB5\n\uD83D\uDCC5 Daily ${today} \u2014 ${hops} artist${hops!==1?'s':''}\n${streak>=2?'\uD83D\uDD25'+streak+' day streak\n':''}${emoji}\n${url}`;
-}
-function copyDailyShare(){
-  const txt=dailyShareText();
-  navigator.clipboard.writeText(txt).catch(()=>{
-    navigator.clipboard.writeText(location.href.split('?')[0]+'?daily').catch(()=>{});
-  });
-  const btn=document.getElementById('dailyShareBtn');
-  const btn2=document.getElementById('winShareDaily');
-  [btn,btn2].forEach(b=>{ if(!b) return; const o=b.textContent; b.textContent='\u2713 Copied!'; setTimeout(()=>b.textContent=o,2000); });
-}
-document.getElementById('dailyBtn').addEventListener('click',startDailyGame);
-document.getElementById('dailyShareBtn').addEventListener('click',copyDailyShare);
-document.getElementById('winShareDaily').addEventListener('click',copyDailyShare);
-
-function launchConfetti(){
-  const canvas=document.getElementById('confettiCanvas');
-  const ctx=canvas.getContext('2d');
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  canvas.style.display='block';
-  const colors=['#f0c640','#3ec8f0','#3ef0aa','#f06070','#fff','#c084fc'];
-  const pieces=Array.from({length:90},()=>({
-    x:Math.random()*canvas.width,
-    y:Math.random()*-canvas.height*0.5,
-    w:6+Math.random()*8,
-    h:10+Math.random()*6,
-    color:colors[Math.floor(Math.random()*colors.length)],
-    rot:Math.random()*360,
-    vx:(Math.random()-0.5)*4,
-    vy:3+Math.random()*5,
-    vr:(Math.random()-0.5)*6,
-    life:1
-  }));
-  let frame=0;
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    let alive=false;
-    for(const p of pieces){
-      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
-      if(p.y<canvas.height+20){ alive=true; }
-      ctx.save();
-      ctx.translate(p.x,p.y);
-      ctx.rotate(p.rot*Math.PI/180);
-      ctx.globalAlpha=Math.max(0,1-p.y/canvas.height);
-      ctx.fillStyle=p.color;
-      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-      ctx.restore();
-    }
-    frame++;
-    if(alive&&frame<180) requestAnimationFrame(draw);
-    else canvas.style.display='none';
-  }
-  draw();
-}
-
-let cStart=null,cEnd=null;
-function openCustom(){
-  cStart=null;cEnd=null;
-  resetMF('mSI','mSD','mSP');resetMF('mEI','mED','mEP');
-  set('mErr','');document.getElementById('shareBox').classList.remove('show');
-  show('customModal');
-  setTimeout(()=>document.getElementById('mSI').focus(),60);
-}
-function closeCustom(){hide('customModal');}
-function resetMF(ii,di,pi){
-  const inp=document.getElementById(ii),drop=document.getElementById(di),pill=document.getElementById(pi);
-  inp.value='';inp.style.display='';drop.style.display='none';drop.innerHTML='';pill.style.display='none';
-}
-function setupMSearch(inpId,dropId,pillId,nameId,clearId,onPick){
-  const inp=document.getElementById(inpId),drop=document.getElementById(dropId);
-  const pill=document.getElementById(pillId),nameEl=document.getElementById(nameId);
-  document.getElementById(clearId).addEventListener('click',()=>{
-    onPick(null);inp.style.display='';pill.style.display='none';
-    drop.style.display='none';document.getElementById('shareBox').classList.remove('show');
-    setTimeout(()=>inp.focus(),30);
-  });
-  inp.addEventListener('input',()=>{
-    const q=inp.value.toLowerCase().trim();
-    drop.innerHTML='';
-    if(!q){drop.style.display='none';return;}
-    const hits=allArtists.filter(a=>a.toLowerCase().includes(q)).slice(0,12);
-    if(!hits.length){drop.style.display='none';return;}
-    hits.forEach(a=>{
-      const item=divEl('m-drop-item');item.textContent=a;
-      item.addEventListener('mousedown',ev=>{
-        ev.preventDefault();onPick(a);inp.value='';inp.style.display='none';
-        nameEl.textContent=a;pill.style.display='flex';drop.style.display='none';
-        set('mErr','');document.getElementById('shareBox').classList.remove('show');
-      });
-      drop.appendChild(item);
-    });
-    drop.style.display='block';
-  });
-  inp.addEventListener('blur',()=>setTimeout(()=>drop.style.display='none',160));
-}
-setupMSearch('mSI','mSD','mSP','mSN','mSC',a=>cStart=a);
-setupMSearch('mEI','mED','mEP','mEN','mEC',a=>cEnd=a);
-
-function buildURL(s,e){
-  return location.href.split('?')[0].split('#')[0]+'?start='+encodeURIComponent(s)+'&end='+encodeURIComponent(e);
-}
-function validateC(){
-  if(!cStart||!cEnd){set('mErr','Please select both artists.');return null;}
-  if(cStart===cEnd){set('mErr','Start and end must be different.');return null;}
-  const p=bfs(cStart,cEnd);
-  if(!p){set('mErr','These artists aren\'t connected in the dataset.');return null;}
-  set('mErr','');return p;
-}
-document.getElementById('mLink').addEventListener('click',()=>{
-  const p=validateC();if(!p) return;
-  document.getElementById('shareUrl').textContent=buildURL(cStart,cEnd);
-  document.getElementById('shareBox').classList.add('show');
-});
-document.getElementById('copyBtn').addEventListener('click',()=>{
-  const url=document.getElementById('shareUrl').textContent;
-  navigator.clipboard.writeText(url).then(()=>{
-    const b=document.getElementById('copyBtn');
-    b.textContent='Copied!';b.classList.add('copied');
-    setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied');},2000);
-  }).catch(()=>{
-    const el=document.getElementById('shareUrl');
-    const r=document.createRange();r.selectNodeContents(el);
-    const s=window.getSelection();s.removeAllRanges();s.addRange(r);
-  });
-});
-document.getElementById('mPlay').addEventListener('click',()=>{
-  const p=validateC();if(!p) return;
-  history.replaceState({},'',buildURL(cStart,cEnd));
-  closeCustom();startGame(cStart,cEnd,p);
-});
-document.getElementById('mClose').addEventListener('click',closeCustom);
-document.getElementById('mCancel').addEventListener('click',closeCustom);
-document.getElementById('customModal').addEventListener('click',e=>{if(e.target.id==='customModal') closeCustom();});
-
-function openHow(){show('howModal');}
-function closeHow(){hide('howModal');}
-document.getElementById('howBtn').addEventListener('click',openHow);
-document.getElementById('howClose').addEventListener('click',closeHow);
-document.getElementById('howPlay').addEventListener('click',closeHow);
-document.getElementById('howModal').addEventListener('click',e=>{if(e.target.id==='howModal') closeHow();});
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    if(document.getElementById('customModal').style.display!=='none') closeCustom();
-    if(document.getElementById('howModal').style.display!=='none') closeHow();
-  }
-});
-
-function divEl(cls){const e=document.createElement('div');e.className=cls;return e;}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function show(id){document.getElementById(id).style.display='flex';}
-function hide(id){document.getElementById(id).style.display='none';}
-function set(id,v){const el=document.getElementById(id);if(el) el.textContent=v;}
-
-async function init(){
-  let data=EMBEDDED;
-  try{const r=await fetch('data.json');if(r.ok) data=await r.json();}catch(_){}
-  songs=data.songs||[];
-  buildGraph(songs);
-
-  refreshStreakBadge(loadStreak());
-
-  try{
-    if(!localStorage.getItem('tfl_seen')){
-      localStorage.setItem('tfl_seen','1');
-      openHow();
-    }
-  }catch(_){}
-
-  const params=new URLSearchParams(location.search);
-  if(params.has('daily')){startDailyGame();return;}
-
-  let sp=params.get('start'),ep=params.get('end');
-  try{if(sp) sp=decodeURIComponent(sp);}catch(_){}
-  try{if(ep) ep=decodeURIComponent(ep);}catch(_){}
-
-  if(sp&&ep&&allArtists.includes(sp)&&allArtists.includes(ep)&&sp!==ep){
-    const p=bfs(sp,ep);
-    if(p){startGame(sp,ep,p);return;}
-  }
-  newGame();
-}
-init();
 </script>
 </body>
 </html>
