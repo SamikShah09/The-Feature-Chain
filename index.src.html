@@ -1392,6 +1392,7 @@ document.getElementById('newMatchup').onclick = () => {
   pickPuzzle();
 };
 
+  
 document.getElementById('helpBtn').onclick = showTutorial;
 document.getElementById('tutNext').onclick = () => {
   if (state.tutorialStep === 3) closeTutorial();
@@ -1404,7 +1405,7 @@ document.getElementById('statsClose').onclick = () => {
   document.getElementById('statsPage').classList.remove('show');
 };
 
-// ========== Init ==========
+  
 updateStatsUI();
 pickPuzzle();
 if (!localStorage.getItem('tfl_tutorial_seen')) {
@@ -1413,3 +1414,4 @@ if (!localStorage.getItem('tfl_tutorial_seen')) {
 </script>
 </body>
 </html>
+
