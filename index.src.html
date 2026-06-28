@@ -17,7 +17,7 @@
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
 button{font-family:inherit;cursor:pointer;}
 
-/* ─ TITLE ── */
+/* ── TITLE ── */
 .title-area{text-align:center;padding:28px 44px 12px;}
 .title-row{display:inline-flex;align-items:center;gap:14px;flex-wrap:nowrap;}
 .title-word{font-size:clamp(22px,4.2vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:-.015em;color:var(--text);white-space:nowrap;}
@@ -43,7 +43,7 @@ button{font-family:inherit;cursor:pointer;}
 .btn.active-path{border-color:var(--gold);color:var(--gold);}
 .btn-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
 
-/* ── MODE BAR ── */
+/* ── MODE BAR ─ */
 .mode-bar{display:flex;align-items:center;gap:10px;padding:0 44px 10px;flex-wrap:wrap;}
 .mode-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);flex-shrink:0;}
 .mode-sep{width:1px;height:26px;background:var(--border);margin:0 4px;flex-shrink:0;}
@@ -54,7 +54,7 @@ button{font-family:inherit;cursor:pointer;}
 .challenge-pill:hover{color:var(--text);border-color:rgba(255,255,255,.26);}
 .challenge-pill.active{border-color:var(--blue);color:var(--blue);background:rgba(62,200,240,.07);}
 
-/* ── STATS ── */
+/* ── STATS BAR ── */
 .stats-bar{display:flex;align-items:center;gap:8px;padding:0 44px 20px;flex-wrap:wrap;}
 .stat{padding:6px 15px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--muted);font-family:monospace;}
 .stat strong{color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;}
@@ -65,7 +65,7 @@ button{font-family:inherit;cursor:pointer;}
 .panel-hint strong{color:var(--gold);}
 .panel-err{border-color:rgba(240,96,112,.22);background:rgba(240,96,112,.04);color:var(--err);}
 
-/* ── CHAIN AREA ── */
+/* ─ CHAIN AREA ── */
 .chain-area{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:8px 0 20px;min-height:280px;}
 .chain-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:44px 60px 52px;position:relative;}
 .chain-scroll::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:rgba(255,255,255,.08);transform:translateY(-50%);pointer-events:none;z-index:0;}
@@ -94,7 +94,7 @@ button{font-family:inherit;cursor:pointer;}
 .stn-group:has(.target.won) .stn-dot,.stn-group:has(.stop) .stn-dot{background:var(--green);border-color:var(--green);}
 .stn-group:has(.revealed) .stn-dot{border-color:var(--gold);}
 
-/* ── CONNECTORS ─ */
+/* ── CONNECTORS ── */
 .connector{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;}
 .c-line{height:3px;width:60px;transition:background .3s;}
 .c-line.dim{background:rgba(255,255,255,.11);}
@@ -111,7 +111,7 @@ button{font-family:inherit;cursor:pointer;}
 .add-btn:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 10px var(--gold-dim);}
 .add-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap;position:absolute;top:46px;}
 
-/* ── INLINE INPUT CARD ── */
+/* ── INLINE INPUT CARD ─ */
 .inp-group{display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:2;}
 .inp-card{border:2px dashed var(--gold);border-radius:var(--r);padding:13px 15px;width:220px;background:var(--surface);position:relative;}
 .inp-toggle{display:flex;gap:4px;margin-bottom:9px;}
@@ -146,7 +146,7 @@ button{font-family:inherit;cursor:pointer;}
 .win-card p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.5;}
 .win-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-/* ── SHARE VISUAL (NEW) ─ */
+/* ── SHARE VISUAL ── */
 .share-visual{background:#000;border-radius:10px;padding:14px;margin-bottom:18px;text-align:left;}
 .share-chain{display:flex;flex-direction:column;gap:3px;}
 .share-row{display:flex;align-items:center;gap:8px;font-size:12px;}
@@ -194,10 +194,35 @@ button{font-family:inherit;cursor:pointer;}
 /* ── FOOTER ─ */
 footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.05em;}
 
-/* ── SCROLLBAR ── */
+/* ─ SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
+
+/* ══════════════════════════════════════
+   NEW: STATS PAGE (Added Back)
+   ══════════════════════════════════════ */
+.stats-page{position:fixed;inset:0;background:var(--bg);z-index:700;display:none;overflow-y:auto;padding:30px 44px;}
+.stats-page.show{display:block;}
+.stats-page-inner{max-width:600px;margin:0 auto;}
+.stats-page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.stats-page-header h2{font-size:22px;color:var(--gold);}
+.stats-page-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;}
+.stats-page-close:hover{color:var(--text);}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.stats-tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.stats-tile .sv{font-size:28px;font-weight:800;color:var(--gold);margin-bottom:4px;}
+.stats-tile .sl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.history-title{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;}
+.history-list{display:flex;flex-direction:column;gap:6px;}
+.history-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.history-item .hi-path{flex:1;color:var(--text);font-weight:600;}
+.history-item .hi-meta{color:var(--muted);font-size:11px;text-align:right;}
+.history-item .hi-chain{color:var(--green);font-weight:700;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--gold);color:#0b0b14;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;z-index:1000;transition:transform .3s;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
@@ -212,6 +237,8 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
   .card-name{font-size:16px;}
   .stn-card{min-width:110px;padding:14px 16px 12px;}
   .share-song{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .stats-page{padding:20px 16px;}
 }
 </style>
 </head>
@@ -242,10 +269,11 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
 
 <!-- ② DESCRIPTION + TOP BUTTONS -->
 <div class="top-bar">
-  <p class="desc">Two artists. Build a route between them, one shared song at a time.
+  <p class="desc">Two artists. Build a connection between them, one shared song at a time.
     Click <strong>+</strong> to add a stop — the rail lights up when a
     <strong>feature connects</strong> them.</p>
   <div class="top-btns">
+    <button class="btn btn-outline" id="statsPageBtn">📊 Stats</button>
     <button class="btn btn-outline" id="hintBtn">Hint</button>
     <button class="btn btn-outline" id="pathBtn"><span class="btn-dot"></span> Shortest path</button>
     <button class="btn btn-gold" id="newBtn">New matchup</button>
@@ -255,7 +283,7 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
 <!-- ③ MODE BAR -->
 <div class="mode-bar">
   <span class="mode-label">Difficulty</span>
-  <button class="pill active" data-diff="daily">Daily</button>
+  <button class="pill active" data-diff="daily">📅 Daily</button>
   <button class="pill" data-diff="easy">Easy</button>
   <button class="pill" data-diff="hard">Hard</button>
   <button class="pill" data-diff="full">Full Dataset</button>
@@ -266,11 +294,13 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
   </button>
 </div>
 
-<!-- ④ STATS -->
+<!-- ④ STATS BAR -->
 <div class="stats-bar">
   <span class="stat">Dataset: <strong id="sSongs">—</strong> songs · <strong id="sArtists">—</strong> artists</span>
   <span class="stat">Your chain: <strong id="sChain">0</strong> artists</span>
   <span class="stat">Shortest known: <strong id="sShortest">?</strong> artists</span>
+  <span class="stat">🔥 Streak: <strong id="sStreak">0</strong></span>
+  <span class="stat">🏆 Wins: <strong id="sWins">0</strong></span>
 </div>
 
 <!-- ⑤ COLLAPSIBLE PANELS -->
@@ -298,7 +328,7 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
     <p id="winMsg"></p>
     <div class="share-visual" id="shareVisual"></div>
     <div class="win-acts">
-      <button class="btn btn-gold" id="winCopy">📤 Share Result</button>
+      <button class="btn btn-gold" id="winCopy"> Share Result</button>
       <button class="btn btn-outline" id="winNew">New matchup</button>
       <button class="btn btn-outline" id="winCustom">Custom Game</button>
     </div>
@@ -351,8 +381,31 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
   </div>
 </div>
 
+<!-- STATS PAGE (Added Back) -->
+<div class="stats-page" id="statsPage">
+  <div class="stats-page-inner">
+    <div class="stats-page-header">
+      <h2>📊 Your Stats</h2>
+      <button class="stats-page-close" id="statsPageClose">×</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stats-tile"><div class="sv" id="spWins">0</div><div class="sl">Total Wins</div></div>
+      <div class="stats-tile"><div class="sv" id="spStreak">0</div><div class="sl">Current Streak</div></div>
+      <div class="stats-tile"><div class="sv" id="spBestStreak">0</div><div class="sl">Best Streak</div></div>
+      <div class="stats-tile"><div class="sv" id="spAvg">—</div><div class="sl">Avg Chain</div></div>
+      <div class="stats-tile"><div class="sv" id="spBest">—</div><div class="sl">Best Chain</div></div>
+      <div class="stats-tile"><div class="sv" id="spTime">—</div><div class="sl">Best Time</div></div>
+    </div>
+    <div class="history-title">Recent Games</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Copied!</div>
+
 <script>
-// ═══════════════════════════════════════
+// ══════════════════════════════════════
 //  DATA
 // ═══════════════════════════════════════
 const EMBEDDED = __DATA__;
@@ -411,6 +464,8 @@ let G={
   artistPicks:[],
   inputVal:'',
   dropMatches:[],
+  startTime: null,
+  moves: 0,
 };
 
 // ═══════════════════════════════════════
@@ -468,7 +523,8 @@ function startGame(s,e,knownPath){
     won:false,sp:knownPath||bfs(s,e),
     pathRevealed:false,
     inputOpen:false,pendingSong:null,artistPicks:[],
-    inputVal:'',dropMatches:[]};
+    inputVal:'',dropMatches:[],
+    startTime: Date.now(), moves: 0};
   hide('winOverlay');hide('hintPanel');hide('errPanel');
   updateStats();renderChain();
   document.getElementById('pathBtn').classList.remove('active-path');
@@ -479,6 +535,7 @@ function updateStats(){
   const inter=G.won?G.fullChain.length-2:G.fullChain.length-1;
   set('sChain',Math.max(0,inter));
   set('sShortest',G.sp?Math.max(0,G.sp.length-2):'?');
+  updateTopStats();
 }
 function lastIn(){return G.fullChain[G.fullChain.length-1];}
 
@@ -525,16 +582,19 @@ function commit(artist,songTitle){
   G.inputVal='';G.dropMatches=[];
   G.inputOpen=false;
   G.pathRevealed=false;
+  G.moves++;
   soundConnect();
   if(artist===G.end){
     G.won=true;
     updateStats();renderChain();
+    const elapsed=Math.floor((Date.now()-G.startTime)/1000);
     setTimeout(()=>{
       const hops=G.fullChain.length-2,sp=G.sp?G.sp.length-2:'?';
       set('winMsg',`Connected in ${hops} hop${hops!==1?'s':''} — shortest possible: ${sp}.`);
       buildShareVisual();
       show('winOverlay');
       soundWin();
+      recordWin(elapsed);
     },350);
   } else {updateStats();renderChain();}
 }
@@ -547,7 +607,7 @@ function showErr(msg){
 }
 
 // ═══════════════════════════════════════
-//  SHORTEST PATH
+//  SHORTEST PATH & HINT
 // ═══════════════════════════════════════
 document.getElementById('pathBtn').addEventListener('click',()=>{
   if(!G.sp){showErr('No path found between these artists.');return;}
@@ -555,10 +615,6 @@ document.getElementById('pathBtn').addEventListener('click',()=>{
   document.getElementById('pathBtn').classList.toggle('active-path',G.pathRevealed);
   renderChain();
 });
-
-// ═══════════════════════════════════════
-//  HINT
-// ═══════════════════════════════════════
 document.getElementById('hintBtn').addEventListener('click',()=>{
   const hp=document.getElementById('hintPanel');
   const sp=G.sp;
@@ -725,7 +781,7 @@ function refreshDrop(card,matches){
 }
 
 // ═══════════════════════════════════════
-//  MODE CONTROLS
+//  MODE CONTROLS & CUSTOM MODAL
 // ═══════════════════════════════════════
 document.querySelectorAll('[data-diff]').forEach(b=>b.addEventListener('click',()=>{
   G.diff=b.dataset.diff;
@@ -742,9 +798,6 @@ document.getElementById('winNew').addEventListener('click',newGame);
 document.getElementById('winCustom').addEventListener('click',openCustom);
 document.getElementById('customBtn').addEventListener('click',openCustom);
 
-// ═══════════════════════════════════════
-//  CUSTOM GAME MODAL
-// ═══════════════════════════════════════
 let cStart=null,cEnd=null;
 function openCustom(){
   cStart=null;cEnd=null;
@@ -826,7 +879,7 @@ document.getElementById('customModal').addEventListener('click',e=>{if(e.target.
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('customModal').style.display!=='none') closeCustom();});
 
 // ═══════════════════════════════════════
-//  SOUND (Web Audio API)
+//  SOUND
 // ═══════════════════════════════════════
 let audioCtx=null;
 function getAudio(){
@@ -854,7 +907,7 @@ function soundWin(){
 
 // ═══════════════════════════════════════
 //  SHARE VISUAL
-// ══════════════════════════════════════
+// ═══════════════════════════════════════
 function buildShareVisual(){
   const vis=document.getElementById('shareVisual');
   vis.innerHTML='';
@@ -878,14 +931,14 @@ function buildShareVisual(){
   vis.appendChild(chain);
   const stats=document.createElement('div');
   stats.className='share-stats';
-  const inter=G.fullChain.length-2;
+  const inter=G.fullChain.length-2; // Number of people added
   stats.innerHTML=`<div><strong>${inter}</strong>Chain</div>
     <div><strong>${inter}</strong>Moves</div>`;
   vis.appendChild(stats);
 }
 
 document.getElementById('winCopy').addEventListener('click',()=>{
-  const lines=[`🎤 The Feature Line — ${G.diff.toUpperCase()}`];
+  const lines=[` The Feature Line — ${G.diff.toUpperCase()}`];
   lines.push(G.start);
   for(let i=0;i<G.songLinks.length;i++){
     lines.push(`  ♪ ${G.songLinks[i]}`);
@@ -899,8 +952,8 @@ document.getElementById('winCopy').addEventListener('click',()=>{
   navigator.clipboard.writeText(text).then(()=>{
     const b=document.getElementById('winCopy');
     b.textContent='Copied!';
-    setTimeout(()=>{b.textContent=' Share Result';},2000);
-  }).catch(()=>alert('Copy failed'));
+    setTimeout(()=>{b.textContent='📤 Share Result';},2000);
+  }).catch(()=>showToast('Copy failed'));
 });
 
 // ═══════════════════════════════════════
@@ -937,8 +990,83 @@ document.getElementById('tutNext').addEventListener('click',()=>{
 document.getElementById('tutSkip').addEventListener('click',closeTutorial);
 
 // ═══════════════════════════════════════
-//  HELPERS
+//  STATS (Added Back)
 // ═══════════════════════════════════════
+function todaySeed(){const d=new Date();return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;}
+function loadStats(){try{return JSON.parse(localStorage.getItem('tfl_stats')||'{}');}catch{return {};}}
+function saveStats(s){localStorage.setItem('tfl_stats',JSON.stringify(s));}
+function recordWin(elapsed){
+  const s=loadStats();
+  s.wins=(s.wins||0)+1;
+  const inter = G.fullChain.length - 2;
+  s.totalChain=(s.totalChain||0)+inter;
+  s.games=(s.games||0)+1;
+  s.bestChain=Math.min(s.bestChain||999,inter);
+  s.bestTime=Math.min(s.bestTime||999999,elapsed);
+  const today=todaySeed();
+  if(s.lastWinDate!==today){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    const yStr=`${yesterday.getFullYear()}-${yesterday.getMonth()}-${yesterday.getDate()}`;
+    s.streak=(s.lastWinDate===yStr)?(s.streak||0)+1:1;
+    s.lastWinDate=today;
+  }
+  s.bestStreak=Math.max(s.bestStreak||0,s.streak||0);
+  s.history=s.history||[];
+  s.history.unshift({
+    date:new Date().toISOString(),
+    start:G.start,end:G.end,
+    chain:G.fullChain.slice(),
+    length:inter,
+    time:elapsed,mode:G.diff
+  });
+  s.history=s.history.slice(0,50);
+  saveStats(s);
+  updateTopStats();
+}
+function updateTopStats(){
+  const s=loadStats();
+  set('sStreak',s.streak||0);
+  set('sWins',s.wins||0);
+}
+function openStatsPage(){
+  const s=loadStats();
+  set('spWins',s.wins||0);
+  set('spStreak',s.streak||0);
+  set('spBestStreak',s.bestStreak||0);
+  set('spAvg',s.games?(s.totalChain/s.games).toFixed(1):'—');
+  set('spBest',(s.bestChain&&s.bestChain<999)?s.bestChain:'—');
+  const bt=s.bestTime&&s.bestTime<999999?`${Math.floor(s.bestTime/60)}:${(s.bestTime%60).toString().padStart(2,'0')}`:'—';
+  set('spTime',bt);
+  const list=document.getElementById('historyList');
+  list.innerHTML='';
+  (s.history||[]).slice(0,10).forEach(h=>{
+    const item=document.createElement('div');
+    item.className='history-item';
+    const d=new Date(h.date);
+    const dateStr=`${d.getMonth()+1}/${d.getDate()}`;
+    item.innerHTML=`<div class="hi-path">${esc(h.start)} → ${esc(h.end)}</div>
+      <div class="hi-meta"><div class="hi-chain">Chain ${h.length}</div><div>${dateStr} · ${h.mode}</div></div>`;
+    list.appendChild(item);
+  });
+  if(!(s.history||[]).length){
+    list.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No games yet. Start playing!</div>';
+  }
+  document.getElementById('statsPage').classList.add('show');
+}
+document.getElementById('statsPageBtn').addEventListener('click',openStatsPage);
+document.getElementById('statsPageClose').addEventListener('click',()=>{
+  document.getElementById('statsPage').classList.remove('show');
+});
+
+// ═══════════════════════════════════════
+//  TOAST & HELPERS
+// ═══════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
 function divEl(cls){const e=document.createElement('div');e.className=cls;return e;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function show(id){document.getElementById(id).style.display='flex';}
@@ -964,6 +1092,7 @@ async function init(){
     if(p){startGame(sp,ep,p);return;}
   }
   newGame();
+  updateTopStats();
   if(!localStorage.getItem('tfl_tutorial_seen')){
     setTimeout(showTutorial,600);
   }
