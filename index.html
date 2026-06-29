@@ -67,26 +67,26 @@ button{font-family:inherit;cursor:pointer;}
 
 /* ─ CHAIN AREA ── */
 .chain-area{flex:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:8px 0 20px;min-height:280px;}
-.chain-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:44px 60px 52px;position:relative;}
+.chain-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:54px 80px 64px;position:relative;}
 .chain-scroll::before{content:'';position:absolute;left:0;right:0;top:50%;height:3px;background:rgba(255,255,255,.08);transform:translateY(-50%);pointer-events:none;z-index:0;}
 .chain-row{display:flex;align-items:center;justify-content:center;min-width:max-content;position:relative;z-index:1;}
 
 /* ── STATION GROUPS ── */
 .stn-group{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
-.stn-card{border-radius:var(--r);padding:18px 22px 16px;min-width:130px;max-width:168px;text-align:center;border:2px solid transparent;}
+.stn-card{border-radius:var(--r);padding:24px 30px 20px;min-width:160px;max-width:200px;text-align:center;border:2px solid transparent;}
 .stn-card.start{border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 1px var(--gold-dim),0 8px 28px rgba(0,0,0,.4);}
 .stn-card.target{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 1px var(--blue-dim),0 8px 28px rgba(0,0,0,.4);}
 .stn-card.stop{border-color:var(--green);background:var(--surface);box-shadow:0 0 0 1px var(--green-dim);}
 .stn-card.target.won{border-color:var(--green);box-shadow:0 0 0 1px var(--green-dim),0 0 24px var(--green-glow);}
 .stn-card.revealed{border-color:var(--gold);border-style:dashed;background:rgba(240,198,64,.04);box-shadow:none;animation:rcard .35s ease-out both;}
 @keyframes rcard{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
-.card-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:7px;}
+.card-role{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:8px;}
 .stn-card.start .card-role{color:var(--gold);}
 .stn-card.target .card-role{color:var(--blue);}
 .stn-card.target.won .card-role{color:var(--green);}
 .stn-card.stop .card-role{color:var(--green);font-size:8px;}
 .stn-card.revealed .card-role{color:var(--gold);}
-.card-name{font-size:20px;font-weight:900;text-transform:uppercase;line-height:1.1;color:var(--text);letter-spacing:-.01em;word-break:break-word;}
+.card-name{font-size:24px;font-weight:900;text-transform:uppercase;line-height:1.1;color:var(--text);letter-spacing:-.01em;word-break:break-word;}
 .stn-card.stop .card-name,.stn-card.revealed .card-name{font-size:14px;}
 .stn-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid transparent;margin-top:9px;}
 .stn-group:has(.start) .stn-dot{border-color:var(--gold);}
@@ -235,7 +235,7 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
   .top-btns{gap:6px;}
   .btn{padding:8px 14px;font-size:12px;}
   .card-name{font-size:16px;}
-  .stn-card{min-width:110px;padding:14px 16px 12px;}
+  .stn-card{min-width:130px;padding:18px 20px 16px;}
   .share-song{display:none;}
   .stats-grid{grid-template-columns:repeat(2,1fr);}
   .stats-page{padding:20px 16px;}
@@ -263,7 +263,7 @@ footer{padding:16px 44px 24px;text-align:center;font-size:11.5px;color:var(--mut
       <span class="t-dot"></span><span class="t-seg"></span>
       <span class="t-dot"></span>
     </div>
-    <span class="title-word">Line</span>
+    <span class="title-word">Chain</span>
   </div>
 </div>
 
