@@ -728,7 +728,13 @@ function renderChain(){
     const inp=document.createElement('input');
     inp.type='text';inp.className='inp-field';inp.id='mainInp';
     inp.placeholder=G.songMode?'Song name…':'Artist name…';
-    inp.value=G.inputVal;inp.autocomplete='off';
+    inp.value=G.inputVal;
+    inp.autocomplete='off';
+    inp.autocorrect='off';
+    inp.autocapitalize='off';
+    inp.spellcheck=false;
+    inp.setAttribute('autocomplete', 'new-password');
+    inp.setAttribute('data-lpignore', 'true');
     inp.addEventListener('input',()=>{
       G.inputVal=inp.value;
       G.dropMatches=G.songMode?songMatches(inp.value):artistMatches(inp.value);
